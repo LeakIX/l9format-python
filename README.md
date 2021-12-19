@@ -14,3 +14,10 @@ which provides a Go implementation.
 poetry install
 poetry run pytest l9format/tests/test_l9format.py
 ```
+
+## Install
+
+Use main branch for the moment:
+```
+poetry add https://github.com/leakix/l9format-python#main
+```
