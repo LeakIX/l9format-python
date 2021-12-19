@@ -92,8 +92,8 @@ class Certificate(Model):
     key_algo: fields.Str()
     key_size: fields.Int()
     issuer_name: fields.Str()
-    not_before: fields.Time()
-    not_after: fields.Time()
+    not_before: fields.DateTime()
+    not_after: fields.DateTime()
     valid: fields.Bool()
 
 
@@ -169,7 +169,7 @@ class L9Event(Model):
     protocol: fields.Str()
     http: fields.Nested(L9HttpEvent)
     summary: fields.Str()
-    time: fields.Time()
+    time: fields.DateTime()
     ssl: fields.Nested(L9SSLEvent)
     ssh: fields.Nested(L9SSHEvent)
     service: fields.Nested(L9ServiceEvent)
