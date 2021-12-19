@@ -24,6 +24,6 @@ jobs:
       - name: Run poetry install
         run: poetry install
       - name: Run tests
-        run: poetry run pytest l9format/tests
+        run: poetry run pytest tests
       - name: Run black
-        run: poetry run black l9format/**/*.py --check
+        run: poetry run black l9format/*.py tests/*.py --check

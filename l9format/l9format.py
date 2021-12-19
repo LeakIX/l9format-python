@@ -158,7 +158,7 @@ class Network(Model):
 class L9Event(Model):
     event_type: fields.Str()
     event_source: fields.Str()
-    event_pipeline: fields.List(fields.Str())
+    event_pipeline: fields.Optional(fields.List(fields.Str()))
     event_fingerprint: fields.Optional(fields.Str())
     ip: fields.Str()
     host: fields.Str()
