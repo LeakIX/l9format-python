@@ -61,6 +61,7 @@ class GeoLocation(Model):
     region_name: fields.Str()
     location: fields.Nested(GeoPoint)
 
+
 class L9SSHEvent(Model):
     fingerprint: fields.Str()
     version: fields.Int()
