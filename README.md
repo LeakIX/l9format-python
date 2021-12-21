@@ -17,10 +17,9 @@ poetry run pytest l9format/tests/test_l9format.py
 
 ## Install
 
-Use main branch for the moment:
-```
-poetry add https://github.com/leakix/l9format-python#main
-```
+See [releases](https://github.com/LeakIX/l9format-python/releases/) for the
+different versions.
+The release `1.3.1-0` will be mapped to `1.3.1.post0`.
 
 ## Documentation
 
