@@ -27,3 +27,6 @@ jobs:
         run: poetry run pytest tests
       - name: Run black
         run: poetry run black l9format/*.py tests/*.py --check
+      - name: Run poetry build
+        run: poetry build
+
