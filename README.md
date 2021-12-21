@@ -21,3 +21,10 @@ Use main branch for the moment:
 ```
 poetry add https://github.com/leakix/l9format-python#main
 ```
+
+## Documentation
+
+```
+from l9format import l9format
+l9format.L9Event.from_dict(res)
+```
