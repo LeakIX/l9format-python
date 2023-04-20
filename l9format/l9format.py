@@ -173,7 +173,7 @@ class L9Event(Model):
     ssl: fields.Nested(L9SSLEvent)
     ssh: fields.Nested(L9SSHEvent)
     service: fields.Nested(L9ServiceEvent)
-    leak: fields.Nested(L9LeakEvent)
+    leak: fields.Optional(fields.Nested((L9LeakEvent)))
     tags: fields.Optional(fields.List(fields.Str()))
     geoip: fields.Nested(GeoLocation)
     network: fields.Nested(Network)
