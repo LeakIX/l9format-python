@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "l9format"
-version = "1.3.1a2"
+version = "1.3.1a3"
 license = "MIT"
 description = "l9format is a schema declaration targeted at interoperability between network recon tools used at LeakIX"
 authors = ["Danny Willems <danny@leakix.net>"]
