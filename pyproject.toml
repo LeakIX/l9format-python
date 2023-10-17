@@ -16,7 +16,7 @@ serde = "^0.8.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
-black = "^21.5b1"
+black = "^22"
 mypy = "*"
 
 [build-system]
