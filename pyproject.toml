@@ -12,6 +12,11 @@ documentation = "https://github.com/leakix/l9format-python"
 
 [tool.poetry.dependencies]
 python = "^3.7"
+# Updating to 0.9.0 breaks the support of iso8601.
+# The author of serde updated its code to use the stdlib iso8601 support, which
+# does not support for instance:
+# 2023-10-05T23:30:36.823867784Z
+# Bump up to python 3.11 fixes the issue as it seems fixed in the stdlib of 3.11
 serde = "^0.8.1"
 
 [tool.poetry.dev-dependencies]
