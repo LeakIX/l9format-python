@@ -177,3 +177,4 @@ class L9Event(Model):
     tags: fields.Optional(fields.List(fields.Str()))
     geoip: fields.Nested(GeoLocation)
     network: fields.Nested(Network)
+    record_age: fields.Optional(fields.Int())
