@@ -103,13 +103,13 @@ class GeoPoint(Model):
 
 
 class GeoLocation(Model):
-    continent_name: fields.Str()
-    region_iso_code: fields.Str()
-    city_name: fields.Str()
-    country_iso_code: fields.Str()
-    country_name: fields.Str()
-    region_name: fields.Str()
-    location: fields.Nested(GeoPoint)
+    continent_name: fields.Optional(fields.Str())
+    region_iso_code: fields.Optional(fields.Str())
+    city_name: fields.Optional(fields.Str())
+    country_iso_code: fields.Optional(fields.Str())
+    country_name: fields.Optional(fields.Str())
+    region_name: fields.Optional(fields.Str())
+    location: fields.Optional(fields.Nested(GeoPoint))
 
 
 class L9SSHEvent(Model):
@@ -170,11 +170,26 @@ class L9Event(Model):
     http: fields.Nested(L9HttpEvent)
     summary: fields.Str()
     time: fields.DateTime()
-    ssl: fields.Nested(L9SSLEvent)
+    ssl: fields.Optional(fields.Nested(L9SSLEvent))
     ssh: fields.Nested(L9SSHEvent)
     service: fields.Nested(L9ServiceEvent)
     leak: fields.Optional(fields.Nested((L9LeakEvent)))
     tags: fields.Optional(fields.List(fields.Str()))
     geoip: fields.Nested(GeoLocation)
     network: fields.Nested(Network)
-    record_age: fields.Optional(fields.Int())
+
+
+class L9Aggregation(Model):
+    summary = fields.Optional(fields.Str())
+    ip = fields.Str()
+    resource_id = fields.Str()
+    open_ports = fields.List(fields.Str())
+    leak_count = fields.Int()
+    leak_event_count = fields.Int()
+    events = fields.List(fields.Nested(L9Event))
+    plugins = fields.List(fields.Str())
+    geoip = fields.Nested(GeoLocation)
+    network = fields.Nested(Network)
+    creation_date = fields.DateTime()
+    update_date = fields.DateTime()
+    fresh = fields.Bool()
