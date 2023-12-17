@@ -16,7 +16,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install poetry
-        run: pip install poetry==${{ poetry-version }}
+        run: pip install poetry==${{ matrix.poetry-version }}
       - name: View poetry --help
         run: poetry --help
       - name: Run poetry install
