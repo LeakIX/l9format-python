@@ -1,5 +1,7 @@
 import decimal
+
 from serde import Model, fields
+
 
 # Import from https://github.com/rossmacarthur/serde/commit/304884bca3c80e8b9a22a054b64dd94e3324b593#diff-dd2f65f16516311f0183377201a3d0b7894438787da732fc2bbc9c28cbde9fb8
 # A helper function...
