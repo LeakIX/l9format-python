@@ -7,12 +7,38 @@ recon tools used at LeakIX.
 This library is equivalent to [l9format](https://github.com/leakix/l9format)
 which provides a Go implementation.
 
-## Run the tests
+## Tools and Usage
 
+### Running Tests
 
+We use `pytest` for testing. Run the tests with:
+
+```bash
+poetry run pytest
 ```
-poetry install
-poetry run pytest l9format/tests/test_l9format.py
+
+### Code Formatting
+
+We use `black` for code formatting. To format the code, run:
+
+```bash
+poetry run black .
+```
+
+### Import Sorting
+
+We use `isort` to sort imports. To sort imports, run:
+
+```bash
+poetry run isort .
+```
+
+### Code Linting
+
+We use `ruff` for linting. Run:
+
+```bash
+poetry run ruff check .
 ```
 
 ## Install
