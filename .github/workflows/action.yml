@@ -21,10 +21,14 @@ jobs:
         run: poetry --help
       - name: Run poetry install
         run: poetry install
-      - name: Run tests
-        run: poetry run pytest tests
-      - name: Run black
-        run: poetry run black l9format/*.py tests/*.py --check
-      - name: Run poetry build
-        run: poetry build
+      - name: lint
+        run: poetry run ruff check .
+      - name: format check
+        run: poetry run black --check .
+      - name: sort-check
+        run: poetry run isort --check-only .
+      - name: test
+        run: poetry run pytest
+      - name: security-audit
+        run: poetry run pip-audit
 

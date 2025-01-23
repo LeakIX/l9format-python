@@ -1,7 +1,8 @@
-from l9format import l9format
-from pathlib import Path
-import os
 import json
+import os
+from pathlib import Path
+
+from l9format import l9format
 
 TESTS_DIR = Path(os.path.dirname(__file__))
 
