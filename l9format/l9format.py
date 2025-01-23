@@ -161,6 +161,7 @@ class L9Event(Model):
     event_pipeline: fields.Optional(fields.List(fields.Str()))
     event_fingerprint: fields.Optional(fields.Str())
     ip: fields.Str()
+    port: fields.Str()
     host: fields.Str()
     reverse: fields.Str()
     mac: fields.Optional(fields.Str())
