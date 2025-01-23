@@ -48,7 +48,7 @@ class Decimal(fields.Instance):
 
             return decimal.Decimal(value)
         except decimal.DecimalException:
-            raise ValidationError("invalid decimal", value=value)
+            raise Exception("invalid decimal", value=value)
 
 
 class L9HttpEvent(Model):
