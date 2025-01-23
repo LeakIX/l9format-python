@@ -11,7 +11,7 @@ repository = "https://github.com/leakix/l9format-python"
 documentation = "https://github.com/leakix/l9format-python"
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 # Updating to 0.9.0 breaks the support of iso8601.
 # The author of serde updated its code to use the stdlib iso8601 support, which
 # does not support for instance:
