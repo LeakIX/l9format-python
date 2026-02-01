@@ -27,6 +27,8 @@ jobs:
         run: poetry run black --check .
       - name: sort-check
         run: poetry run isort --check-only .
+      - name: typecheck
+        run: poetry run mypy l9format
       - name: test
         run: poetry run pytest
       - name: security-audit
