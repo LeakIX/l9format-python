@@ -8,7 +8,9 @@ from serde import Model, fields
 def round_decimal(
     decimal_obj: decimal.Decimal, num_of_places: int = 6
 ) -> decimal.Decimal:
-    return decimal_obj.quantize(decimal.Decimal(10) ** -num_of_places).normalize()
+    return decimal_obj.quantize(
+        decimal.Decimal(10) ** -num_of_places
+    ).normalize()
 
 
 class Decimal(fields.Instance):
@@ -32,7 +34,7 @@ class Decimal(fields.Instance):
 
     ty = decimal.Decimal
 
-    def __init__(self, resolution=None, **kwargs):
+    def __init__(self, resolution: int | None = None, **kwargs: object) -> None:
         super(Decimal, self).__init__(self.__class__.ty, **kwargs)
         self.resolution = resolution
 
@@ -41,16 +43,16 @@ class Decimal(fields.Instance):
             value = round_decimal(value, num_of_places=self.resolution)
         return "{0:f}".format(value)
 
-    def deserialize(self, value) -> decimal.Decimal:
+    def deserialize(self, value: object) -> decimal.Decimal:
         try:
             if self.resolution is not None:
                 return round_decimal(
-                    decimal.Decimal(value), num_of_places=self.resolution
+                    decimal.Decimal(str(value)), num_of_places=self.resolution
                 )
 
-            return decimal.Decimal(value)
-        except decimal.DecimalException:
-            raise Exception("invalid decimal", value=value)
+            return decimal.Decimal(str(value))
+        except decimal.DecimalException as e:
+            raise ValueError(f"invalid decimal: {value}") from e
 
 
 class L9HttpEvent(Model):

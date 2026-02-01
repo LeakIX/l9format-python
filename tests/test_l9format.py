@@ -7,7 +7,9 @@ from l9format import l9format
 TESTS_DIR = Path(os.path.dirname(__file__))
 
 IP4SCOUT_FILES = [
-    f for f in Path.iterdir(TESTS_DIR) if Path.is_file(f) and "ip4scout" in f.name
+    f
+    for f in Path.iterdir(TESTS_DIR)
+    if Path.is_file(f) and "ip4scout" in f.name
 ]
 
 
