@@ -1,0 +1,104 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+
+- Add mypy type checking with serde-compatible configuration (fac243d, #16)
+- Add `.editorconfig` for consistent editor settings (fac243d, #16)
+- Add Dependabot configuration for pip and GitHub Actions (2144fb2, #12)
+
+### Changed
+
+- Expand Makefile with self-documenting help and additional targets (fac243d, #16)
+- Add explicit tool configuration for ruff, black, isort in pyproject.toml
+  (fac243d, #16)
+- Fix type annotations in `Decimal` class and improve exception handling
+  (fac243d, #16)
+
+### Infrastructure
+
+- CI: bump actions/checkout from 4 to 6 (138b369, #14)
+- CI: bump actions/setup-python from 5 to 6 (2c42bd0, #15)
+- CI: add typecheck step to workflow (fac243d, #16)
+- CI: update to Python 3.13, remove Python 3.14 due to serde compatibility
+  (17402be, #13)
+
+## [1.3.2] - 2025-01-23
+
+### Changed
+
+- Bump version to 1.3.2 (5887f5e, #10)
+- README: remove versioning section (f2694d7, #10)
+
+### Infrastructure
+
+- CI: add format, lint, and import sort checks (f3f9ebd, #8)
+- Add Makefile with standard targets (7be8625, #8)
+- Update development dependencies (60ee697, #8)
+- Update README with current usage instructions (269c004, #9)
+
+## [1.3.1-1] - 2025-01-23
+
+### Added
+
+- L9Event: add missing field `port` (03d6655, #6)
+
+### Changed
+
+- Bump minimum Python version to 3.9 (577774e, #7)
+- Use `Exception` instead of undefined `ValidationError` (285fe96)
+
+### Infrastructure
+
+- CI: drop Python 3.7 and 3.8 support (66faa74, de5aae6, #7)
+- CI: add Python 3.12 support (ba3b5a5, #7)
+- CI: use Poetry 1.8.5 (635b24c, #7)
+- CI: update to ubuntu 22.04 (afdbe95)
+- CI: update CI configuration and fix variable name (61683cb, 8612f13, #4, #5)
+
+## [1.3.1-0] - 2021-12-21
+
+### Added
+
+- Add `L9Aggregation` model (4807f73)
+- Add `record_age` as optional field (0d91cab)
+- Add `__init__.py` with `__version__` for version verification (897bd6c)
+- Add Decimal fields for `lat` and `lon` in GeoPoint (dad2666)
+- Add more tests with ip4scout outputs (5102665)
+- Add mypy for type checking (cd75682)
+
+### Changed
+
+- Make `leak` field optional in L9Event (25d841e)
+- Make some fields optional in models (4807f73)
+- Use `DateTime` instead of `Time` for time fields (20d4b1d, #3)
+- Empty lists are returned as None (4a58022, #2)
+- Move tests to the root directory (b7eecf6, #2)
+- Remove decimal dependency (094ddd2)
+
+### Infrastructure
+
+- Complete pyproject.toml configuration (d7f8696)
+- Add poetry build in CI (325581f)
+- Check format in CI and move black to dev deps (2a33ed0)
+- Use Poetry 1.1.11 (259a81b)
+
+## [1.0.0] - 2021-05-23
+
+### Added
+
+- Initial release based on l9format Go implementation (67cc265, #1)
+- L9Event model with HTTP, SSL, SSH, Service, Leak, GeoIP, and Network fields
+- Basic serialization/deserialization using serde library
+
+[Unreleased]: https://github.com/LeakIX/l9format-python/compare/1.3.2...HEAD
+[1.3.2]: https://github.com/LeakIX/l9format-python/compare/1.3.1-1...1.3.2
+[1.3.1-1]: https://github.com/LeakIX/l9format-python/compare/1.3.1-0...1.3.1-1
+[1.3.1-0]: https://github.com/LeakIX/l9format-python/compare/1.0.0...1.3.1-0
+[1.0.0]: https://github.com/LeakIX/l9format-python/releases/tag/1.0.0
