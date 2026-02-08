@@ -10,6 +10,7 @@ and this project adheres to
 
 ### Added
 
+- Add `py.typed` marker for PEP 561 compliance ([7f49ff5], [#31])
 - Add field-level assertions to deserialization tests ([cbea4fc], [#26])
 - Add 34 edge-case and validation tests covering missing fields, null values,
   empty strings, boundary integers, malformed datetimes/decimals, and nested
@@ -156,6 +157,7 @@ and this project adheres to
 
 <!-- Commit links -->
 
+[7f49ff5]: https://github.com/LeakIX/l9format-python/commit/7f49ff5
 [cd74b55]: https://github.com/LeakIX/l9format-python/commit/cd74b55
 [0130743]: https://github.com/LeakIX/l9format-python/commit/0130743
 [28c76f1]: https://github.com/LeakIX/l9format-python/commit/28c76f1
@@ -233,4 +235,5 @@ and this project adheres to
 [#33]: https://github.com/LeakIX/l9format-python/issues/33
 [#25]: https://github.com/LeakIX/l9format-python/issues/25
 [#35]: https://github.com/LeakIX/l9format-python/issues/35
+[#31]: https://github.com/LeakIX/l9format-python/issues/31
 [#43]: https://github.com/LeakIX/l9format-python/issues/43
