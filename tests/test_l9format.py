@@ -19,7 +19,7 @@ def test_l9event_json_from_reference_repository():
     L9Event.from_dict(c)
 
 
-def test_l9events_form_ip4scout():
+def test_l9events_from_ip4scout():
     for path in IP4SCOUT_FILES:
         c = json.load(open(str(path), "r"))
         L9Event.from_dict(c)

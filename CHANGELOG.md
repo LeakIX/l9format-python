@@ -15,6 +15,11 @@ and this project adheres to
 - Tests now import from `l9format` package directly instead of
   `l9format.l9format` ([e8aef2e], [#21])
 
+### Fixed
+
+- Fix typo in test name: `test_l9events_form_ip4scout` ->
+  `test_l9events_from_ip4scout` ([0d8736e], [#27])
+
 ### Infrastructure
 
 - CI: enforce CHANGELOG.md changes are in dedicated commits
@@ -137,6 +142,7 @@ and this project adheres to
 
 <!-- Commit links -->
 
+[0d8736e]: https://github.com/LeakIX/l9format-python/commit/0d8736e
 [d30efd2]: https://github.com/LeakIX/l9format-python/commit/d30efd2
 [1dcfbef]: https://github.com/LeakIX/l9format-python/commit/1dcfbef
 [e8aef2e]: https://github.com/LeakIX/l9format-python/commit/e8aef2e
@@ -199,4 +205,5 @@ and this project adheres to
 [#16]: https://github.com/LeakIX/l9format-python/pull/16
 [#18]: https://github.com/LeakIX/l9format-python/pull/18
 [#21]: https://github.com/LeakIX/l9format-python/issues/21
+[#27]: https://github.com/LeakIX/l9format-python/issues/27
 [#35]: https://github.com/LeakIX/l9format-python/issues/35
