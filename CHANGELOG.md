@@ -10,6 +10,9 @@ and this project adheres to
 
 ### Added
 
+- Add 32 round-trip and serialization tests covering `to_dict()`, `Decimal`
+  field serialize/deserialize, and serde `None`-omission behavior
+  ([d554f1e], [#24])
 - Add `py.typed` marker for PEP 561 compliance ([7f49ff5], [#31])
 - Add field-level assertions to deserialization tests ([cbea4fc], [#26])
 - Add 34 edge-case and validation tests covering missing fields, null values,
@@ -157,6 +160,7 @@ and this project adheres to
 
 <!-- Commit links -->
 
+[d554f1e]: https://github.com/LeakIX/l9format-python/commit/d554f1e
 [7f49ff5]: https://github.com/LeakIX/l9format-python/commit/7f49ff5
 [cd74b55]: https://github.com/LeakIX/l9format-python/commit/cd74b55
 [0130743]: https://github.com/LeakIX/l9format-python/commit/0130743
@@ -235,5 +239,6 @@ and this project adheres to
 [#33]: https://github.com/LeakIX/l9format-python/issues/33
 [#25]: https://github.com/LeakIX/l9format-python/issues/25
 [#35]: https://github.com/LeakIX/l9format-python/issues/35
+[#24]: https://github.com/LeakIX/l9format-python/issues/24
 [#31]: https://github.com/LeakIX/l9format-python/issues/31
 [#43]: https://github.com/LeakIX/l9format-python/issues/43
