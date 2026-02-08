@@ -12,7 +12,7 @@ IP4SCOUT_FILES = [
 ]
 
 
-def test_l9event_json_from_reference_repository():
+def test_l9event_json_from_reference_repository() -> None:
     path = TESTS_DIR / "l9event.json"
     with open(path) as f:
         c = json.load(f)
@@ -55,7 +55,7 @@ def test_l9event_json_from_reference_repository():
     ]
 
 
-def test_l9events_from_ip4scout():
+def test_l9events_from_ip4scout() -> None:
     for path in IP4SCOUT_FILES:
         with open(path) as f:
             c = json.load(f)
@@ -68,7 +68,7 @@ def test_l9events_from_ip4scout():
         assert len(event.port) > 0
 
 
-def test_iso8601_nanosecond_parsing():
+def test_iso8601_nanosecond_parsing() -> None:
     """
     Test ISO8601 datetime parsing with nanosecond precision.
 
@@ -89,7 +89,7 @@ def test_iso8601_nanosecond_parsing():
     assert event.time.second == 36
 
 
-def test_all_models_importable_from_package():
+def test_all_models_importable_from_package() -> None:
     """Verify all public models are importable from the l9format package."""
     import l9format
 
