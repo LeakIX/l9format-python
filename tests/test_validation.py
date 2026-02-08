@@ -303,6 +303,14 @@ class TestMalformedDecimals:
         assert gp.lat == -1.5
         assert gp.lon == -2.5
 
+    def test_geopoint_round_trip_preserves_value(self) -> None:
+        """Regression: normalize() used to strip trailing zeros."""
+        gp = GeoPoint.from_dict({"lat": "1.000000", "lon": "2.500000"})
+        serialized = gp.to_dict()
+        gp2 = GeoPoint.from_dict(serialized)
+        assert gp2.lat == gp.lat
+        assert gp2.lon == gp.lon
+
 
 class TestComplexNestedValidation:
     """Test validation behavior with complex nested structures."""
