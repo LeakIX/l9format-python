@@ -10,6 +10,7 @@ and this project adheres to
 
 ### Added
 
+- Add field-level assertions to deserialization tests ([cbea4fc], [#26])
 - Add 34 edge-case and validation tests covering missing fields, null values,
   empty strings, boundary integers, malformed datetimes/decimals, and nested
   validation ([1ca6e4d], [#33])
@@ -152,6 +153,7 @@ and this project adheres to
 <!-- Commit links -->
 
 [b66a6f5]: https://github.com/LeakIX/l9format-python/commit/b66a6f5
+[cbea4fc]: https://github.com/LeakIX/l9format-python/commit/cbea4fc
 [3547e22]: https://github.com/LeakIX/l9format-python/commit/3547e22
 [1ca6e4d]: https://github.com/LeakIX/l9format-python/commit/1ca6e4d
 [0d8736e]: https://github.com/LeakIX/l9format-python/commit/0d8736e
@@ -218,6 +220,7 @@ and this project adheres to
 [#18]: https://github.com/LeakIX/l9format-python/pull/18
 [#21]: https://github.com/LeakIX/l9format-python/issues/21
 [#22]: https://github.com/LeakIX/l9format-python/issues/22
+[#26]: https://github.com/LeakIX/l9format-python/issues/26
 [#27]: https://github.com/LeakIX/l9format-python/issues/27
 [#33]: https://github.com/LeakIX/l9format-python/issues/33
 [#25]: https://github.com/LeakIX/l9format-python/issues/25
