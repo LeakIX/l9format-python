@@ -27,6 +27,8 @@ and this project adheres to
   ([1dcfbef], [#21])
 - Tests now import from `l9format` package directly instead of
   `l9format.l9format` ([e8aef2e], [#21])
+- Use `pytest.mark.parametrize` for ip4scout tests so each file is a distinct
+  test case ([ac4744e], [#32])
 
 ### Fixed
 
@@ -160,6 +162,7 @@ and this project adheres to
 
 <!-- Commit links -->
 
+[ac4744e]: https://github.com/LeakIX/l9format-python/commit/ac4744e
 [d554f1e]: https://github.com/LeakIX/l9format-python/commit/d554f1e
 [7f49ff5]: https://github.com/LeakIX/l9format-python/commit/7f49ff5
 [cd74b55]: https://github.com/LeakIX/l9format-python/commit/cd74b55
@@ -241,4 +244,5 @@ and this project adheres to
 [#35]: https://github.com/LeakIX/l9format-python/issues/35
 [#24]: https://github.com/LeakIX/l9format-python/issues/24
 [#31]: https://github.com/LeakIX/l9format-python/issues/31
+[#32]: https://github.com/LeakIX/l9format-python/issues/32
 [#43]: https://github.com/LeakIX/l9format-python/issues/43

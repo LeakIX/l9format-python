@@ -1,15 +1,15 @@
 import json
 from pathlib import Path
 
+import pytest
+
 from l9format import L9Event
 
 TESTS_DIR = Path(__file__).parent
 
-IP4SCOUT_FILES = [
-    f
-    for f in Path.iterdir(TESTS_DIR)
-    if Path.is_file(f) and "ip4scout" in f.name
-]
+IP4SCOUT_FILES = sorted(
+    f for f in TESTS_DIR.iterdir() if f.is_file() and "ip4scout" in f.name
+)
 
 
 def test_l9event_json_from_reference_repository() -> None:
@@ -55,17 +55,17 @@ def test_l9event_json_from_reference_repository() -> None:
     ]
 
 
-def test_l9events_from_ip4scout() -> None:
-    for path in IP4SCOUT_FILES:
-        with open(path) as f:
-            c = json.load(f)
-        event = L9Event.from_dict(c)
-        assert event.event_source == "ip4scout"
-        assert event.event_type == "synack"
-        assert isinstance(event.ip, str)
-        assert len(event.ip) > 0
-        assert isinstance(event.port, str)
-        assert len(event.port) > 0
+@pytest.mark.parametrize("path", IP4SCOUT_FILES, ids=lambda p: p.name)
+def test_l9events_from_ip4scout(path: Path) -> None:
+    with open(path) as f:
+        c = json.load(f)
+    event = L9Event.from_dict(c)
+    assert event.event_source == "ip4scout"
+    assert event.event_type == "synack"
+    assert isinstance(event.ip, str)
+    assert len(event.ip) > 0
+    assert isinstance(event.port, str)
+    assert len(event.port) > 0
 
 
 def test_iso8601_nanosecond_parsing() -> None:
