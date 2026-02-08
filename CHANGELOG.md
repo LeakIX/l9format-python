@@ -16,6 +16,8 @@ and this project adheres to
 
 ### Changed
 
+- Use `importlib.metadata.version()` for `__version__`, single source of truth
+  in `pyproject.toml` ([3547e22], [#22])
 - Re-export all public models from `__init__.py` and define `__all__`
   ([1dcfbef], [#21])
 - Tests now import from `l9format` package directly instead of
@@ -148,6 +150,7 @@ and this project adheres to
 
 <!-- Commit links -->
 
+[3547e22]: https://github.com/LeakIX/l9format-python/commit/3547e22
 [1ca6e4d]: https://github.com/LeakIX/l9format-python/commit/1ca6e4d
 [0d8736e]: https://github.com/LeakIX/l9format-python/commit/0d8736e
 [d30efd2]: https://github.com/LeakIX/l9format-python/commit/d30efd2
@@ -212,6 +215,7 @@ and this project adheres to
 [#16]: https://github.com/LeakIX/l9format-python/pull/16
 [#18]: https://github.com/LeakIX/l9format-python/pull/18
 [#21]: https://github.com/LeakIX/l9format-python/issues/21
+[#22]: https://github.com/LeakIX/l9format-python/issues/22
 [#27]: https://github.com/LeakIX/l9format-python/issues/27
 [#33]: https://github.com/LeakIX/l9format-python/issues/33
 [#35]: https://github.com/LeakIX/l9format-python/issues/35
