@@ -8,24 +8,37 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-02-07
+
 ### Added
 
+- Add 16 protocol-specific event types: `L9SSHEvent`, `L9VNCEvent`,
+  `L9FTPEvent`, `L9SMTPEvent`, `L9TelnetEvent`, `L9RedisEvent`,
+  `L9MySQLEvent`, `L9PostgreSQLEvent`, `L9MongoDBEvent`, `L9MemcachedEvent`,
+  `L9AMQPEvent`, `L9LDAPEvent`, `L9SIPEvent`, `L9RDPEvent`, `L9DNSEvent`,
+  `L9RTSPEvent` ([8f45e82], [#18])
+- Extend `L9SSHEvent` with enumeration fields for host keys, algorithms, and
+  KEX methods ([8f45e82], [#18])
+
+### Changed
+
+- Bump minimum Python version from 3.13 to 3.11 for `datetime.fromisoformat`
+  UTC suffix support ([82245e9], [#18])
+- Version bump to 1.4.0 ([8f45e82], [#18])
+
+### Infrastructure
+
+- CI: drop Python 3.10 from test matrix ([82245e9], [#18])
 - Add mypy type checking with serde-compatible configuration
   ([fac243d], [#16])
 - Add `.editorconfig` for consistent editor settings ([fac243d], [#16])
 - Add Dependabot configuration for pip and GitHub Actions ([2144fb2], [#12])
-
-### Changed
-
 - Expand Makefile with self-documenting help and additional targets
   ([fac243d], [#16])
 - Add explicit tool configuration for ruff, black, isort in pyproject.toml
   ([fac243d], [#16])
 - Fix type annotations in `Decimal` class and improve exception handling
   ([fac243d], [#16])
-
-### Infrastructure
-
 - CI: bump actions/checkout from 4 to 6 ([138b369], [#14])
 - CI: bump actions/setup-python from 5 to 6 ([2c42bd0], [#15])
 - CI: add typecheck step to workflow ([fac243d], [#16])
@@ -103,7 +116,8 @@ and this project adheres to
 
 <!-- Version links -->
 
-[Unreleased]: https://github.com/LeakIX/l9format-python/compare/1.3.2...HEAD
+[Unreleased]: https://github.com/LeakIX/l9format-python/compare/1.4.0...HEAD
+[1.4.0]: https://github.com/LeakIX/l9format-python/compare/1.3.2...1.4.0
 [1.3.2]: https://github.com/LeakIX/l9format-python/compare/1.3.1-1...1.3.2
 [1.3.1-1]: https://github.com/LeakIX/l9format-python/compare/1.3.1-0...1.3.1-1
 [1.3.1-0]: https://github.com/LeakIX/l9format-python/compare/1.0.0...1.3.1-0
@@ -111,6 +125,8 @@ and this project adheres to
 
 <!-- Commit links -->
 
+[8f45e82]: https://github.com/LeakIX/l9format-python/commit/8f45e82
+[82245e9]: https://github.com/LeakIX/l9format-python/commit/82245e9
 [fac243d]: https://github.com/LeakIX/l9format-python/commit/fac243d
 [2144fb2]: https://github.com/LeakIX/l9format-python/commit/2144fb2
 [138b369]: https://github.com/LeakIX/l9format-python/commit/138b369
@@ -166,3 +182,4 @@ and this project adheres to
 [#14]: https://github.com/LeakIX/l9format-python/pull/14
 [#15]: https://github.com/LeakIX/l9format-python/pull/15
 [#16]: https://github.com/LeakIX/l9format-python/pull/16
+[#18]: https://github.com/LeakIX/l9format-python/pull/18
