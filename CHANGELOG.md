@@ -28,7 +28,7 @@ and this project adheres to
 
 - Fix leaked file handles in tests using context managers ([b66a6f5], [#25])
 - Fix `Decimal.normalize()` stripping trailing zeros, breaking round-trip
-  serialization ([28c76f1], [#28])
+  serialization; add regression test ([28c76f1], [0130743], [#28])
 - Fix typo in test name: `test_l9events_form_ip4scout` ->
   `test_l9events_from_ip4scout` ([0d8736e], [#27])
 
@@ -154,6 +154,7 @@ and this project adheres to
 
 <!-- Commit links -->
 
+[0130743]: https://github.com/LeakIX/l9format-python/commit/0130743
 [28c76f1]: https://github.com/LeakIX/l9format-python/commit/28c76f1
 [b66a6f5]: https://github.com/LeakIX/l9format-python/commit/b66a6f5
 [cbea4fc]: https://github.com/LeakIX/l9format-python/commit/cbea4fc
