@@ -48,6 +48,10 @@ lint: ## Lint code using ruff
 lint-fix: ## Lint and fix code using ruff
 	poetry run ruff check --fix .
 
+.PHONY: lint-shell
+lint-shell: ## Lint shell scripts using shellcheck
+	shellcheck .github/scripts/*.sh
+
 .PHONY: typecheck
 typecheck: ## Run mypy type checker
 	poetry run mypy l9format
