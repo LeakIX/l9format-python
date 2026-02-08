@@ -1,5 +1,7 @@
 # Makefile for l9format-python project
 
+VERSION := $(shell poetry version -s)
+
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
     SED := $(shell command -v gsed 2>/dev/null)
@@ -94,8 +96,34 @@ check-trailing-whitespace: ## Check for trailing whitespaces in source files
 install: ## Install dependencies with Poetry
 	poetry install
 
+.PHONY: build
+build: clean-dist ## Build package for distribution
+	poetry build
+
+.PHONY: publish-dry-run
+publish-dry-run: build ## Dry-run: show what would be published
+	@echo "Would publish l9format v$(VERSION)"
+	@echo "Would create tag: v$(VERSION)"
+	@echo "Would create GitHub release: v$(VERSION)"
+	@echo "Package contents:"
+	@ls -lh dist/
+	poetry publish --dry-run
+
+.PHONY: publish
+publish: build ## Publish to PyPI, tag and create GitHub release
+	poetry publish
+	git tag -a "v$(VERSION)" -m "Release v$(VERSION)"
+	git push origin "v$(VERSION)"
+	gh release create "v$(VERSION)" dist/* \
+		--title "v$(VERSION)" \
+		--notes "Release v$(VERSION)"
+
+.PHONY: clean-dist
+clean-dist: ## Clean distribution artifacts
+	rm -rf dist/
+
 .PHONY: clean
-clean: ## Clean build artifacts and caches
+clean: clean-dist ## Clean build artifacts and caches
 	rm -rf __pycache__ .pytest_cache .mypy_cache .ruff_cache
 	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
 	find . -type f -name "*.pyc" -delete 2>/dev/null || true
