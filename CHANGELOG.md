@@ -15,6 +15,11 @@ and this project adheres to
 - Tests now import from `l9format` package directly instead of
   `l9format.l9format` ([e8aef2e], [#21])
 
+### Infrastructure
+
+- CI: enforce CHANGELOG.md changes are in dedicated commits
+  ([d30efd2], [#35])
+
 ## [1.4.0] - 2026-02-07
 
 ### Added
@@ -132,6 +137,7 @@ and this project adheres to
 
 <!-- Commit links -->
 
+[d30efd2]: https://github.com/LeakIX/l9format-python/commit/d30efd2
 [1dcfbef]: https://github.com/LeakIX/l9format-python/commit/1dcfbef
 [e8aef2e]: https://github.com/LeakIX/l9format-python/commit/e8aef2e
 [8f45e82]: https://github.com/LeakIX/l9format-python/commit/8f45e82
@@ -193,3 +199,4 @@ and this project adheres to
 [#16]: https://github.com/LeakIX/l9format-python/pull/16
 [#18]: https://github.com/LeakIX/l9format-python/pull/18
 [#21]: https://github.com/LeakIX/l9format-python/issues/21
+[#35]: https://github.com/LeakIX/l9format-python/issues/35
