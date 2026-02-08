@@ -1,10 +1,9 @@
 import json
-import os
 from pathlib import Path
 
 from l9format import L9Event
 
-TESTS_DIR = Path(os.path.dirname(__file__))
+TESTS_DIR = Path(__file__).parent
 
 IP4SCOUT_FILES = [
     f
@@ -15,13 +14,15 @@ IP4SCOUT_FILES = [
 
 def test_l9event_json_from_reference_repository():
     path = TESTS_DIR / "l9event.json"
-    c = json.load(open(str(path), "r"))
+    with open(path) as f:
+        c = json.load(f)
     L9Event.from_dict(c)
 
 
 def test_l9events_from_ip4scout():
     for path in IP4SCOUT_FILES:
-        c = json.load(open(str(path), "r"))
+        with open(path) as f:
+            c = json.load(f)
         L9Event.from_dict(c)
 
 
@@ -33,7 +34,8 @@ def test_iso8601_nanosecond_parsing():
     correctly in Python 3.11+.
     """
     path = TESTS_DIR / "l9event.json"
-    c = json.load(open(str(path), "r"))
+    with open(path) as f:
+        c = json.load(f)
     # Use a timestamp with nanosecond precision (9 decimal places)
     c["time"] = "2023-10-05T23:30:36.823867784Z"
     event = L9Event.from_dict(c)

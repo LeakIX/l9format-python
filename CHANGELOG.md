@@ -25,6 +25,7 @@ and this project adheres to
 
 ### Fixed
 
+- Fix leaked file handles in tests using context managers ([b66a6f5], [#25])
 - Fix typo in test name: `test_l9events_form_ip4scout` ->
   `test_l9events_from_ip4scout` ([0d8736e], [#27])
 
@@ -150,6 +151,7 @@ and this project adheres to
 
 <!-- Commit links -->
 
+[b66a6f5]: https://github.com/LeakIX/l9format-python/commit/b66a6f5
 [3547e22]: https://github.com/LeakIX/l9format-python/commit/3547e22
 [1ca6e4d]: https://github.com/LeakIX/l9format-python/commit/1ca6e4d
 [0d8736e]: https://github.com/LeakIX/l9format-python/commit/0d8736e
@@ -218,4 +220,5 @@ and this project adheres to
 [#22]: https://github.com/LeakIX/l9format-python/issues/22
 [#27]: https://github.com/LeakIX/l9format-python/issues/27
 [#33]: https://github.com/LeakIX/l9format-python/issues/33
+[#25]: https://github.com/LeakIX/l9format-python/issues/25
 [#35]: https://github.com/LeakIX/l9format-python/issues/35
