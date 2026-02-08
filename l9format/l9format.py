@@ -6,9 +6,7 @@ from serde import Model, fields
 def round_decimal(
     decimal_obj: decimal.Decimal, num_of_places: int = 6
 ) -> decimal.Decimal:
-    return decimal_obj.quantize(
-        decimal.Decimal(10) ** -num_of_places
-    ).normalize()
+    return decimal_obj.quantize(decimal.Decimal(10) ** -num_of_places)
 
 
 class Decimal(fields.Instance):
