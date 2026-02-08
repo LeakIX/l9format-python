@@ -8,6 +8,12 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Added
+
+- Add 34 edge-case and validation tests covering missing fields, null values,
+  empty strings, boundary integers, malformed datetimes/decimals, and nested
+  validation ([1ca6e4d], [#33])
+
 ### Changed
 
 - Re-export all public models from `__init__.py` and define `__all__`
@@ -142,6 +148,7 @@ and this project adheres to
 
 <!-- Commit links -->
 
+[1ca6e4d]: https://github.com/LeakIX/l9format-python/commit/1ca6e4d
 [0d8736e]: https://github.com/LeakIX/l9format-python/commit/0d8736e
 [d30efd2]: https://github.com/LeakIX/l9format-python/commit/d30efd2
 [1dcfbef]: https://github.com/LeakIX/l9format-python/commit/1dcfbef
@@ -206,4 +213,5 @@ and this project adheres to
 [#18]: https://github.com/LeakIX/l9format-python/pull/18
 [#21]: https://github.com/LeakIX/l9format-python/issues/21
 [#27]: https://github.com/LeakIX/l9format-python/issues/27
+[#33]: https://github.com/LeakIX/l9format-python/issues/33
 [#35]: https://github.com/LeakIX/l9format-python/issues/35
