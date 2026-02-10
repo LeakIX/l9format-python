@@ -1,6 +1,9 @@
 l9format python
 ===================
 
+[![PyPI](https://img.shields.io/pypi/v/l9format)](https://pypi.org/project/l9format/)
+[![GitHub Release](https://img.shields.io/github/v/release/LeakIX/l9format-python)](https://github.com/LeakIX/l9format-python/releases/latest)
+
 l9format is a schema declaration targeted at interoperability between network
 recon tools used at LeakIX.
 
@@ -43,9 +46,19 @@ poetry run ruff check .
 
 ## Install
 
-See [releases](https://github.com/LeakIX/l9format-python/releases/) for the
-different versions.
-The release `1.3.1-0` will be mapped to `1.3.1.post0`.
+```bash
+pip install l9format
+```
+
+Or with a specific version:
+
+```bash
+pip install l9format==1.4.0
+```
+
+See [PyPI](https://pypi.org/project/l9format/) and
+[GitHub releases](https://github.com/LeakIX/l9format-python/releases/latest)
+for all available versions.
 
 ## Documentation
 
