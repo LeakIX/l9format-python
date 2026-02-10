@@ -8,8 +8,17 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-02-09
+
 ### Added
 
+- Add 16 protocol-specific event types: `L9SSHEvent`, `L9VNCEvent`,
+  `L9FTPEvent`, `L9SMTPEvent`, `L9TelnetEvent`, `L9RedisEvent`,
+  `L9MySQLEvent`, `L9PostgreSQLEvent`, `L9MongoDBEvent`, `L9MemcachedEvent`,
+  `L9AMQPEvent`, `L9LDAPEvent`, `L9SIPEvent`, `L9RDPEvent`, `L9DNSEvent`,
+  `L9RTSPEvent` ([8f45e82], [#18])
+- Extend `L9SSHEvent` with enumeration fields for host keys, algorithms, and
+  KEX methods ([8f45e82], [#18])
 - Add 32 round-trip and serialization tests covering `to_dict()`, `Decimal`
   field serialize/deserialize, and serde `None`-omission behavior
   ([d554f1e], [#24])
@@ -21,6 +30,9 @@ and this project adheres to
 
 ### Changed
 
+- Bump minimum Python version from 3.13 to 3.11 for `datetime.fromisoformat`
+  UTC suffix support ([82245e9], [#18])
+- Version bump to 1.4.0 ([8f45e82], [#18])
 - Use `importlib.metadata.version()` for `__version__`, single source of truth
   in `pyproject.toml` ([3547e22], [#22])
 - Re-export all public models from `__init__.py` and define `__all__`
@@ -42,29 +54,6 @@ and this project adheres to
 
 ### Infrastructure
 
-- CI: enforce CHANGELOG.md changes are in dedicated commits
-  ([d30efd2], [#35])
-
-## [1.4.0] - 2026-02-07
-
-### Added
-
-- Add 16 protocol-specific event types: `L9SSHEvent`, `L9VNCEvent`,
-  `L9FTPEvent`, `L9SMTPEvent`, `L9TelnetEvent`, `L9RedisEvent`,
-  `L9MySQLEvent`, `L9PostgreSQLEvent`, `L9MongoDBEvent`, `L9MemcachedEvent`,
-  `L9AMQPEvent`, `L9LDAPEvent`, `L9SIPEvent`, `L9RDPEvent`, `L9DNSEvent`,
-  `L9RTSPEvent` ([8f45e82], [#18])
-- Extend `L9SSHEvent` with enumeration fields for host keys, algorithms, and
-  KEX methods ([8f45e82], [#18])
-
-### Changed
-
-- Bump minimum Python version from 3.13 to 3.11 for `datetime.fromisoformat`
-  UTC suffix support ([82245e9], [#18])
-- Version bump to 1.4.0 ([8f45e82], [#18])
-
-### Infrastructure
-
 - CI: drop Python 3.10 from test matrix ([82245e9], [#18])
 - Add mypy type checking with serde-compatible configuration
   ([fac243d], [#16])
@@ -81,6 +70,8 @@ and this project adheres to
 - CI: add typecheck step to workflow ([fac243d], [#16])
 - CI: update to Python 3.13, remove Python 3.14 due to serde compatibility
   ([17402be], [#13])
+- CI: enforce CHANGELOG.md changes are in dedicated commits
+  ([d30efd2], [#35])
 
 ## [1.3.2] - 2025-01-23
 
