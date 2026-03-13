@@ -8,6 +8,10 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Infrastructure
+
+- Bump ruff dev dependency from `^0.14.14` to `>=0.14.14,<0.16.0` ([ac8a1db], [#50])
+
 ## [1.4.0] - 2026-02-09
 
 ### Added
@@ -153,6 +157,7 @@ and this project adheres to
 
 <!-- Commit links -->
 
+[ac8a1db]: https://github.com/LeakIX/l9format-python/commit/ac8a1db
 [ac4744e]: https://github.com/LeakIX/l9format-python/commit/ac4744e
 [d554f1e]: https://github.com/LeakIX/l9format-python/commit/d554f1e
 [7f49ff5]: https://github.com/LeakIX/l9format-python/commit/7f49ff5
@@ -236,4 +241,5 @@ and this project adheres to
 [#24]: https://github.com/LeakIX/l9format-python/issues/24
 [#31]: https://github.com/LeakIX/l9format-python/issues/31
 [#32]: https://github.com/LeakIX/l9format-python/issues/32
+[#50]: https://github.com/LeakIX/l9format-python/pull/50
 [#43]: https://github.com/LeakIX/l9format-python/issues/43
