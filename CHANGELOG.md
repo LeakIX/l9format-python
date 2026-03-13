@@ -8,6 +8,10 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Infrastructure
+
+- CI: bump actions/checkout from 4 to 6 ([6c9eecd], [#49])
+
 ## [1.4.0] - 2026-02-09
 
 ### Added
@@ -153,6 +157,7 @@ and this project adheres to
 
 <!-- Commit links -->
 
+[6c9eecd]: https://github.com/LeakIX/l9format-python/commit/6c9eecd
 [ac4744e]: https://github.com/LeakIX/l9format-python/commit/ac4744e
 [d554f1e]: https://github.com/LeakIX/l9format-python/commit/d554f1e
 [7f49ff5]: https://github.com/LeakIX/l9format-python/commit/7f49ff5
@@ -236,4 +241,5 @@ and this project adheres to
 [#24]: https://github.com/LeakIX/l9format-python/issues/24
 [#31]: https://github.com/LeakIX/l9format-python/issues/31
 [#32]: https://github.com/LeakIX/l9format-python/issues/32
+[#49]: https://github.com/LeakIX/l9format-python/pull/49
 [#43]: https://github.com/LeakIX/l9format-python/issues/43
