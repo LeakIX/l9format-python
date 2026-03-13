@@ -8,6 +8,11 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Infrastructure
+
+- Bump isort dev dependency from `^7.0.0` to `>=7,<9` to allow isort 8.x
+  ([4464bfd], [#51])
+
 ## [1.4.0] - 2026-02-09
 
 ### Added
@@ -153,6 +158,7 @@ and this project adheres to
 
 <!-- Commit links -->
 
+[4464bfd]: https://github.com/LeakIX/l9format-python/commit/4464bfd
 [ac4744e]: https://github.com/LeakIX/l9format-python/commit/ac4744e
 [d554f1e]: https://github.com/LeakIX/l9format-python/commit/d554f1e
 [7f49ff5]: https://github.com/LeakIX/l9format-python/commit/7f49ff5
@@ -237,3 +243,4 @@ and this project adheres to
 [#31]: https://github.com/LeakIX/l9format-python/issues/31
 [#32]: https://github.com/LeakIX/l9format-python/issues/32
 [#43]: https://github.com/LeakIX/l9format-python/issues/43
+[#51]: https://github.com/LeakIX/l9format-python/pull/51
