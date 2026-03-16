@@ -255,4 +255,3 @@ and this project adheres to
 [#51]: https://github.com/LeakIX/l9format-python/pull/51
 [#56]: https://github.com/LeakIX/l9format-python/pull/56
 [#43]: https://github.com/LeakIX/l9format-python/issues/43
-[#51]: https://github.com/LeakIX/l9format-python/pull/51
