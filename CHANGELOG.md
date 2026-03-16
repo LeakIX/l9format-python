@@ -8,6 +8,24 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-03-16
+
+### Changed
+
+- **BREAKING**: Replace `serde` dependency with Python stdlib `dataclasses`.
+  The `serde` library is unmaintained. All models now use `@dataclass` with a
+  custom `Model` base class that provides the same `from_dict()`/`to_dict()`
+  API. `ValidationError` is now exported from `l9format` directly instead of
+  `serde`.
+- Remove `Decimal` custom field class (was a `serde.fields.Instance` subclass).
+  Decimal serialization/deserialization is now handled internally by the `Model`
+  base class.
+
+### Infrastructure
+
+- CI: add Python 3.14 to test matrix
+- Remove serde-specific mypy overrides from `pyproject.toml`
+
 ## [1.4.1] - 2026-03-16
 
 ### Infrastructure
@@ -161,7 +179,8 @@ and this project adheres to
 
 <!-- Version links -->
 
-[Unreleased]: https://github.com/LeakIX/l9format-python/compare/1.4.1...HEAD
+[Unreleased]: https://github.com/LeakIX/l9format-python/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/LeakIX/l9format-python/compare/v1.4.1...v2.0.0
 [1.4.1]: https://github.com/LeakIX/l9format-python/compare/1.4.0...1.4.1
 [1.4.0]: https://github.com/LeakIX/l9format-python/compare/1.3.2...1.4.0
 [1.3.2]: https://github.com/LeakIX/l9format-python/compare/1.3.1-1...1.3.2
