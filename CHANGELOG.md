@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [1.4.1] - 2026-03-16
+
 ### Infrastructure
 
 - CI: bump actions/checkout from 4 to 6 ([6c9eecd], [#49])
@@ -159,7 +161,8 @@ and this project adheres to
 
 <!-- Version links -->
 
-[Unreleased]: https://github.com/LeakIX/l9format-python/compare/1.4.0...HEAD
+[Unreleased]: https://github.com/LeakIX/l9format-python/compare/1.4.1...HEAD
+[1.4.1]: https://github.com/LeakIX/l9format-python/compare/1.4.0...1.4.1
 [1.4.0]: https://github.com/LeakIX/l9format-python/compare/1.3.2...1.4.0
 [1.3.2]: https://github.com/LeakIX/l9format-python/compare/1.3.1-1...1.3.2
 [1.3.1-1]: https://github.com/LeakIX/l9format-python/compare/1.3.1-0...1.3.1-1
