@@ -12,6 +12,7 @@ and this project adheres to
 
 - CI: move shellcheck into its own dedicated workflow, separate from changelog
   checks ([8c9bace], [#65])
+- CI: bump astral-sh/setup-uv from 6 to 7 ([c9216ba], [#64])
 
 ## [2.0.0] - 2026-03-16
 
@@ -196,6 +197,7 @@ and this project adheres to
 <!-- Commit links -->
 
 [fa582dc]: https://github.com/LeakIX/l9format-python/commit/fa582dc
+[c9216ba]: https://github.com/LeakIX/l9format-python/commit/c9216ba
 [8c9bace]: https://github.com/LeakIX/l9format-python/commit/8c9bace
 [bc4872d]: https://github.com/LeakIX/l9format-python/commit/bc4872d
 [6c9eecd]: https://github.com/LeakIX/l9format-python/commit/6c9eecd
@@ -294,4 +296,5 @@ and this project adheres to
 [#59]: https://github.com/LeakIX/l9format-python/issues/59
 [#62]: https://github.com/LeakIX/l9format-python/pull/62
 [#43]: https://github.com/LeakIX/l9format-python/issues/43
+[#64]: https://github.com/LeakIX/l9format-python/pull/64
 [#65]: https://github.com/LeakIX/l9format-python/pull/65
