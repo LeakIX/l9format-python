@@ -10,7 +10,6 @@ import json
 from pathlib import Path
 
 import pytest
-from serde import ValidationError
 
 from l9format import (
     Certificate,
@@ -21,6 +20,7 @@ from l9format import (
     L9HttpEvent,
     Network,
 )
+from l9format.l9format import ValidationError
 
 TESTS_DIR = Path(__file__).parent
 

@@ -1,6 +1,17 @@
+import dataclasses
 import decimal
+from collections import OrderedDict
+from datetime import datetime
+from typing import Any, Optional
 
-from serde import Model, fields
+
+class ValidationError(Exception):
+    """Raised when a required field is missing or a type check fails."""
+
+    def __init__(self, message: str, value: object = None) -> None:
+        super().__init__(message)
+        self.message = message
+        self.value = value
 
 
 def round_decimal(
@@ -9,341 +20,521 @@ def round_decimal(
     return decimal_obj.quantize(decimal.Decimal(10) ** -num_of_places)
 
 
-class Decimal(fields.Instance):
-    """
-    A `~decimal.Decimal` field.
+def _is_optional(tp: Any) -> bool:
+    """Check if a type annotation is Optional[X]."""
+    from typing import Union, get_args, get_origin
 
-    This field serializes `~decimal.Decimal` objects as strings and
-    deserializes string representations of Decimals as `~decimal.Decimal`
-    objects.
+    if get_origin(tp) is Union:
+        args = get_args(tp)
+        return type(None) in args
+    return False
 
-    The resolution of the decimal can be specified. When not specified,
-    the number is not rounded. When it is specified, the decimal is rounded
-    to this number of decimal places upon serialization and deserialization.
 
-    Args:
-        resolution (int | None): The number of decimal places to round to.
-            When None, rounding is disabled.
-        **kwargs: keyword arguments for the `Field` constructor.
-    """
+def _unwrap_optional(tp: Any) -> Any:
+    """Extract X from Optional[X]."""
+    from typing import Union, get_args, get_origin
 
-    ty = decimal.Decimal
+    if get_origin(tp) is Union:
+        args = get_args(tp)
+        for arg in args:
+            if arg is not type(None):
+                return arg
+    return tp
 
-    def __init__(self, resolution: int | None = None, **kwargs: object) -> None:
-        super(Decimal, self).__init__(self.__class__.ty, **kwargs)
-        self.resolution = resolution
 
-    def serialize(self, value: decimal.Decimal) -> str:
-        if self.resolution is not None:
-            value = round_decimal(value, num_of_places=self.resolution)
-        return "{0:f}".format(value)
+def _deserialize_value(value: object, tp: Any) -> object:
+    """Deserialize a value into the expected type."""
+    if value is None:
+        return None
 
-    def deserialize(self, value: object) -> decimal.Decimal:
+    if _is_optional(tp):
+        tp = _unwrap_optional(tp)
+
+    from typing import get_args, get_origin
+
+    origin = get_origin(tp)
+
+    if origin is list:
+        elem_type = get_args(tp)[0] if get_args(tp) else object
+        if not isinstance(value, list):
+            raise ValidationError(
+                f"expected list, got {type(value).__name__}",
+                value,
+            )
+        return [_deserialize_value(item, elem_type) for item in value]
+
+    if origin is dict:
+        args = get_args(tp)
+        key_type = args[0] if args else object
+        val_type = args[1] if len(args) > 1 else object
+        if not isinstance(value, dict):
+            raise ValidationError(
+                f"expected dict, got {type(value).__name__}",
+                value,
+            )
+        return {
+            _deserialize_value(k, key_type): _deserialize_value(v, val_type)
+            for k, v in value.items()
+        }
+
+    if isinstance(tp, type) and issubclass(tp, Model):
+        if not isinstance(value, dict):
+            raise ValidationError(
+                f"expected dict for nested model, "
+                f"got {type(value).__name__}",
+                value,
+            )
+        return tp.from_dict(value)
+
+    if isinstance(tp, type) and issubclass(tp, datetime):
+        if not isinstance(value, str):
+            raise ValidationError(
+                f"expected string for datetime, " f"got {type(value).__name__}",
+                value,
+            )
+        if not value:
+            raise ValidationError("empty datetime string", value)
         try:
-            if self.resolution is not None:
-                return round_decimal(
-                    decimal.Decimal(str(value)), num_of_places=self.resolution
-                )
+            return datetime.fromisoformat(value.replace("Z", "+00:00"))
+        except ValueError as e:
+            raise ValidationError(f"invalid datetime: {value}", value) from e
+
+    if isinstance(tp, type) and issubclass(tp, decimal.Decimal):
+        try:
             return decimal.Decimal(str(value))
         except decimal.DecimalException as e:
             raise ValueError(f"invalid decimal: {value}") from e
+
+    return value
+
+
+class Model:
+    """Base model providing from_dict/to_dict with serde-compatible
+    behavior."""
+
+    __dataclass_fields__: dict[str, dataclasses.Field[Any]]
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "Model":
+        if not isinstance(d, dict):
+            raise ValidationError(f"expected dict, got {type(d).__name__}", d)
+        kwargs: dict[str, Any] = {}
+        hints = cls._get_type_hints()
+        for f in cls.__dataclass_fields__.values():
+            name = f.name
+            tp = hints.get(name, f.type)
+            optional = _is_optional(tp)
+
+            if name not in d:
+                if optional:
+                    kwargs[name] = None
+                    continue
+                raise ValidationError(f"missing required field: {name}")
+
+            value = d[name]
+
+            if value is None:
+                if optional:
+                    kwargs[name] = None
+                    continue
+                # Let the deserializer handle None for types that
+                # produce their own errors (e.g. Decimal -> ValueError)
+                inner = _unwrap_optional(tp) if optional else tp
+                if isinstance(inner, type) and issubclass(
+                    inner, (str, int, bool)
+                ):
+                    raise ValidationError(
+                        f"field '{name}' is required but got None"
+                    )
+
+            kwargs[name] = _deserialize_value(value, tp)
+
+        return cls(**kwargs)
+
+    def to_dict(self) -> OrderedDict:
+        result: OrderedDict = OrderedDict()
+        hints = self.__class__._get_type_hints()
+        for f in self.__class__.__dataclass_fields__.values():
+            value = getattr(self, f.name)
+            tp = hints.get(f.name, f.type)
+            optional = _is_optional(tp)
+            if optional and value is None:
+                continue
+            result[f.name] = self._serialize_field(value, tp)
+        return result
+
+    def _serialize_field(self, value: object, tp: Any) -> object:
+        if value is None:
+            return None
+        if isinstance(value, Model):
+            return value.to_dict()
+        if isinstance(value, datetime):
+            return value.isoformat()
+        if isinstance(value, decimal.Decimal):
+            return f"{value:f}"
+        if isinstance(value, list):
+            return [self._serialize_field(item, object) for item in value]
+        if isinstance(value, dict):
+            return {
+                k: self._serialize_field(v, object) for k, v in value.items()
+            }
+        return value
+
+    @classmethod
+    def _get_type_hints(cls) -> dict[str, Any]:
+        import typing
+
+        return typing.get_type_hints(cls)
+
+    def to_json(self, **kwargs: Any) -> str:
+        import json
+
+        return json.dumps(self.to_dict(), **kwargs)
+
+    @classmethod
+    def from_json(cls, s: str, **kwargs: Any) -> "Model":
+        import json
+
+        return cls.from_dict(json.loads(s, **kwargs))
 
 
 # --- Base Models ---
 
 
+@dataclasses.dataclass
 class GeoPoint(Model):
-    lat: Decimal()
-    lon: Decimal()
+    lat: decimal.Decimal
+    lon: decimal.Decimal
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.lat, decimal.Decimal):
+            try:
+                self.lat = decimal.Decimal(str(self.lat))
+            except decimal.DecimalException as e:
+                raise ValueError(f"invalid decimal: {self.lat}") from e
+        if not isinstance(self.lon, decimal.Decimal):
+            try:
+                self.lon = decimal.Decimal(str(self.lon))
+            except decimal.DecimalException as e:
+                raise ValueError(f"invalid decimal: {self.lon}") from e
 
 
+@dataclasses.dataclass
 class GeoLocation(Model):
-    continent_name: fields.Optional(fields.Str())
-    region_iso_code: fields.Optional(fields.Str())
-    city_name: fields.Optional(fields.Str())
-    country_iso_code: fields.Optional(fields.Str())
-    country_name: fields.Optional(fields.Str())
-    region_name: fields.Optional(fields.Str())
-    location: fields.Optional(fields.Nested(GeoPoint))
+    continent_name: Optional[str] = None
+    region_iso_code: Optional[str] = None
+    city_name: Optional[str] = None
+    country_iso_code: Optional[str] = None
+    country_name: Optional[str] = None
+    region_name: Optional[str] = None
+    location: Optional[GeoPoint] = None
 
 
+@dataclasses.dataclass
 class Network(Model):
-    organization_name: fields.Str()
-    asn: fields.Int()
-    network: fields.Str()
+    organization_name: str = ""
+    asn: int = 0
+    network: str = ""
 
 
+@dataclasses.dataclass
 class Certificate(Model):
-    cn: fields.Str()
-    domain: fields.Optional(fields.List(fields.Str()))
-    fingerprint: fields.Str()
-    key_algo: fields.Str()
-    key_size: fields.Int()
-    issuer_name: fields.Str()
-    not_before: fields.DateTime()
-    not_after: fields.DateTime()
-    valid: fields.Bool()
+    cn: str = ""
+    domain: Optional[list[str]] = None
+    fingerprint: str = ""
+    key_algo: str = ""
+    key_size: int = 0
+    issuer_name: str = ""
+    not_before: datetime = None  # type: ignore[assignment]
+    not_after: datetime = None  # type: ignore[assignment]
+    valid: bool = False
 
 
+@dataclasses.dataclass
 class SoftwareModule(Model):
-    name: fields.Str()
-    version: fields.Str()
-    fingerprint: fields.Str()
+    name: str = ""
+    version: str = ""
+    fingerprint: str = ""
 
 
+@dataclasses.dataclass
 class Software(Model):
-    name: fields.Str()
-    version: fields.Str()
-    os: fields.Str()
-    modules: fields.Optional(fields.List(fields.Nested(SoftwareModule)))
-    fingerprint: fields.Str()
+    name: str = ""
+    version: str = ""
+    os: str = ""
+    modules: Optional[list[SoftwareModule]] = None
+    fingerprint: str = ""
 
 
+@dataclasses.dataclass
 class ServiceCredentials(Model):
-    noauth: fields.Bool()
-    username: fields.Str()
-    password: fields.Str()
-    key: fields.Str()
-    raw: fields.Optional(fields.Str())
+    noauth: bool = False
+    username: str = ""
+    password: str = ""
+    key: str = ""
+    raw: Optional[str] = None
 
 
+@dataclasses.dataclass
 class DatasetSummary(Model):
-    rows: fields.Int()
-    files: fields.Int()
-    size: fields.Int()
-    collections: fields.Int()
-    infected: fields.Bool()
-    ransom_notes: fields.Optional(fields.List(fields.Str()))
+    rows: int = 0
+    files: int = 0
+    size: int = 0
+    collections: int = 0
+    infected: bool = False
+    ransom_notes: Optional[list[str]] = None
 
 
 # --- Service Events ---
 
 
+@dataclasses.dataclass
 class L9HttpEvent(Model):
-    root: fields.Str()
-    url: fields.Str()
-    status: fields.Int()
-    length: fields.Int()
-    header: fields.Optional(fields.Dict(key=fields.Str(), value=fields.Str()))
-    title: fields.Str()
-    favicon_hash: fields.Str()
+    root: str = ""
+    url: str = ""
+    status: int = 0
+    length: int = 0
+    header: Optional[dict[str, str]] = None
+    title: str = ""
+    favicon_hash: str = ""
 
 
+@dataclasses.dataclass
 class L9SSLEvent(Model):
-    detected: fields.Bool()
-    enabled: fields.Bool()
-    jarm: fields.Str()
-    cypher_suite: fields.Str()
-    version: fields.Str()
-    certificate: fields.Nested(Certificate)
+    detected: bool = False
+    enabled: bool = False
+    jarm: str = ""
+    cypher_suite: str = ""
+    version: str = ""
+    certificate: Certificate = None  # type: ignore[assignment]
 
 
+@dataclasses.dataclass
 class L9ServiceEvent(Model):
-    credentials: fields.Nested(ServiceCredentials)
-    software: fields.Nested(Software)
+    credentials: ServiceCredentials = None  # type: ignore[assignment]
+    software: Software = None  # type: ignore[assignment]
 
 
+@dataclasses.dataclass
 class L9LeakEvent(Model):
-    stage: fields.Str()
-    type: fields.Str()
-    severity: fields.Str()
-    dataset: fields.Nested(DatasetSummary)
+    stage: str = ""
+    type: str = ""
+    severity: str = ""
+    dataset: DatasetSummary = None  # type: ignore[assignment]
 
 
 # --- Protocol Events ---
 
 
+@dataclasses.dataclass
 class L9SSHEvent(Model):
-    fingerprint: fields.Optional(fields.Str())
-    version: fields.Optional(fields.Int())
-    banner: fields.Optional(fields.Str())
-    motd: fields.Optional(fields.Str())
-    key_type: fields.Optional(fields.Str())
-    key: fields.Optional(fields.Str())
-    kex_algorithms: fields.Optional(fields.List(fields.Str()))
-    host_key_algorithms: fields.Optional(fields.List(fields.Str()))
-    encryption_algorithms: fields.Optional(fields.List(fields.Str()))
-    mac_algorithms: fields.Optional(fields.List(fields.Str()))
-    compression_algorithms: fields.Optional(fields.List(fields.Str()))
-    auth_methods: fields.Optional(fields.List(fields.Str()))
+    fingerprint: Optional[str] = None
+    version: Optional[int] = None
+    banner: Optional[str] = None
+    motd: Optional[str] = None
+    key_type: Optional[str] = None
+    key: Optional[str] = None
+    kex_algorithms: Optional[list[str]] = None
+    host_key_algorithms: Optional[list[str]] = None
+    encryption_algorithms: Optional[list[str]] = None
+    mac_algorithms: Optional[list[str]] = None
+    compression_algorithms: Optional[list[str]] = None
+    auth_methods: Optional[list[str]] = None
 
 
+@dataclasses.dataclass
 class L9VNCEvent(Model):
-    version: fields.Optional(fields.Str())
-    security_types: fields.Optional(fields.List(fields.Str()))
-    noauth: fields.Optional(fields.Bool())
+    version: Optional[str] = None
+    security_types: Optional[list[str]] = None
+    noauth: Optional[bool] = None
 
 
+@dataclasses.dataclass
 class L9FTPEvent(Model):
-    banner: fields.Optional(fields.Str())
-    tls_supported: fields.Optional(fields.Bool())
-    anonymous: fields.Optional(fields.Bool())
+    banner: Optional[str] = None
+    tls_supported: Optional[bool] = None
+    anonymous: Optional[bool] = None
 
 
+@dataclasses.dataclass
 class L9SMTPEvent(Model):
-    banner: fields.Optional(fields.Str())
-    starttls: fields.Optional(fields.Bool())
-    extensions: fields.Optional(fields.List(fields.Str()))
+    banner: Optional[str] = None
+    starttls: Optional[bool] = None
+    extensions: Optional[list[str]] = None
 
 
+@dataclasses.dataclass
 class L9TelnetEvent(Model):
-    banner: fields.Optional(fields.Str())
-    options: fields.Optional(fields.List(fields.Str()))
-    auth_required: fields.Optional(fields.Bool())
+    banner: Optional[str] = None
+    options: Optional[list[str]] = None
+    auth_required: Optional[bool] = None
 
 
+@dataclasses.dataclass
 class L9RedisEvent(Model):
-    version: fields.Optional(fields.Str())
-    mode: fields.Optional(fields.Str())
-    os: fields.Optional(fields.Str())
-    auth_required: fields.Optional(fields.Bool())
+    version: Optional[str] = None
+    mode: Optional[str] = None
+    os: Optional[str] = None
+    auth_required: Optional[bool] = None
 
 
+@dataclasses.dataclass
 class L9MySQLEvent(Model):
-    version: fields.Optional(fields.Str())
-    protocol_version: fields.Optional(fields.Int())
-    auth_plugin: fields.Optional(fields.Str())
-    server_status: fields.Optional(fields.Str())
+    version: Optional[str] = None
+    protocol_version: Optional[int] = None
+    auth_plugin: Optional[str] = None
+    server_status: Optional[str] = None
 
 
+@dataclasses.dataclass
 class L9PostgreSQLEvent(Model):
-    version: fields.Optional(fields.Str())
-    databases: fields.Optional(fields.List(fields.Str()))
-    ssl_enabled: fields.Optional(fields.Bool())
-    auth_method: fields.Optional(fields.Str())
-    server_encoding: fields.Optional(fields.Str())
-    client_encoding: fields.Optional(fields.Str())
-    timezone: fields.Optional(fields.Str())
-    max_connections: fields.Optional(fields.Int())
+    version: Optional[str] = None
+    databases: Optional[list[str]] = None
+    ssl_enabled: Optional[bool] = None
+    auth_method: Optional[str] = None
+    server_encoding: Optional[str] = None
+    client_encoding: Optional[str] = None
+    timezone: Optional[str] = None
+    max_connections: Optional[int] = None
 
 
+@dataclasses.dataclass
 class L9MongoDBEvent(Model):
-    version: fields.Optional(fields.Str())
-    databases: fields.Optional(fields.List(fields.Str()))
-    auth_required: fields.Optional(fields.Bool())
-    wire_version: fields.Optional(fields.Int())
+    version: Optional[str] = None
+    databases: Optional[list[str]] = None
+    auth_required: Optional[bool] = None
+    wire_version: Optional[int] = None
 
 
+@dataclasses.dataclass
 class L9MemcachedEvent(Model):
-    version: fields.Optional(fields.Str())
-    libevent: fields.Optional(fields.Str())
-    curr_items: fields.Optional(fields.Int())
-    total_items: fields.Optional(fields.Int())
-    bytes: fields.Optional(fields.Int())
-    max_bytes: fields.Optional(fields.Int())
-    cmd_get: fields.Optional(fields.Int())
-    cmd_set: fields.Optional(fields.Int())
-    get_hits: fields.Optional(fields.Int())
-    get_misses: fields.Optional(fields.Int())
-    threads: fields.Optional(fields.Int())
+    version: Optional[str] = None
+    libevent: Optional[str] = None
+    curr_items: Optional[int] = None
+    total_items: Optional[int] = None
+    bytes: Optional[int] = None
+    max_bytes: Optional[int] = None
+    cmd_get: Optional[int] = None
+    cmd_set: Optional[int] = None
+    get_hits: Optional[int] = None
+    get_misses: Optional[int] = None
+    threads: Optional[int] = None
 
 
+@dataclasses.dataclass
 class L9AMQPEvent(Model):
-    protocol_major: fields.Optional(fields.Int())
-    protocol_minor: fields.Optional(fields.Int())
-    product: fields.Optional(fields.Str())
-    version: fields.Optional(fields.Str())
-    platform: fields.Optional(fields.Str())
+    protocol_major: Optional[int] = None
+    protocol_minor: Optional[int] = None
+    product: Optional[str] = None
+    version: Optional[str] = None
+    platform: Optional[str] = None
 
 
+@dataclasses.dataclass
 class L9LDAPEvent(Model):
-    naming_contexts: fields.Optional(fields.List(fields.Str()))
-    supported_versions: fields.Optional(fields.List(fields.Str()))
-    vendor_name: fields.Optional(fields.Str())
-    vendor_version: fields.Optional(fields.Str())
-    supported_sasl: fields.Optional(fields.List(fields.Str()))
-    anonymous_bind: fields.Optional(fields.Bool())
-    can_enumerate: fields.Optional(fields.Bool())
+    naming_contexts: Optional[list[str]] = None
+    supported_versions: Optional[list[str]] = None
+    vendor_name: Optional[str] = None
+    vendor_version: Optional[str] = None
+    supported_sasl: Optional[list[str]] = None
+    anonymous_bind: Optional[bool] = None
+    can_enumerate: Optional[bool] = None
 
 
+@dataclasses.dataclass
 class L9SIPEvent(Model):
-    version: fields.Optional(fields.Str())
-    user_agent: fields.Optional(fields.Str())
-    server: fields.Optional(fields.Str())
-    allow: fields.Optional(fields.List(fields.Str()))
-    supported: fields.Optional(fields.List(fields.Str()))
+    version: Optional[str] = None
+    user_agent: Optional[str] = None
+    server: Optional[str] = None
+    allow: Optional[list[str]] = None
+    supported: Optional[list[str]] = None
 
 
+@dataclasses.dataclass
 class L9RDPEvent(Model):
-    product_version: fields.Optional(fields.Str())
-    nla_required: fields.Optional(fields.Bool())
-    ssl_enabled: fields.Optional(fields.Bool())
-    hostname: fields.Optional(fields.Str())
+    product_version: Optional[str] = None
+    nla_required: Optional[bool] = None
+    ssl_enabled: Optional[bool] = None
+    hostname: Optional[str] = None
 
 
+@dataclasses.dataclass
 class L9DNSEvent(Model):
-    software: fields.Optional(fields.Str())
-    version: fields.Optional(fields.Str())
-    recursion: fields.Optional(fields.Bool())
-    dnssec: fields.Optional(fields.Bool())
-    zone_transfer: fields.Optional(fields.Bool())
-    nameservers: fields.Optional(fields.List(fields.Str()))
+    software: Optional[str] = None
+    version: Optional[str] = None
+    recursion: Optional[bool] = None
+    dnssec: Optional[bool] = None
+    zone_transfer: Optional[bool] = None
+    nameservers: Optional[list[str]] = None
 
 
+@dataclasses.dataclass
 class L9RTSPEvent(Model):
-    server: fields.Optional(fields.Str())
-    methods: fields.Optional(fields.List(fields.Str()))
+    server: Optional[str] = None
+    methods: Optional[list[str]] = None
 
 
 # --- Main Event ---
 
 
+@dataclasses.dataclass
 class L9Event(Model):
-    event_type: fields.Str()
-    event_source: fields.Str()
-    event_pipeline: fields.Optional(fields.List(fields.Str()))
-    event_fingerprint: fields.Optional(fields.Str())
-    ip: fields.Str()
-    port: fields.Str()
-    host: fields.Str()
-    reverse: fields.Str()
-    mac: fields.Optional(fields.Str())
-    vendor: fields.Optional(fields.Str())
-    transport: fields.Optional(fields.List(fields.Str()))
-    protocol: fields.Str()
-    http: fields.Nested(L9HttpEvent)
-    summary: fields.Str()
-    time: fields.DateTime()
-    ssl: fields.Optional(fields.Nested(L9SSLEvent))
+    event_type: str = ""
+    event_source: str = ""
+    event_pipeline: Optional[list[str]] = None
+    event_fingerprint: Optional[str] = None
+    ip: str = ""
+    port: str = ""
+    host: str = ""
+    reverse: str = ""
+    mac: Optional[str] = None
+    vendor: Optional[str] = None
+    transport: Optional[list[str]] = None
+    protocol: str = ""
+    http: L9HttpEvent = None  # type: ignore[assignment]
+    summary: str = ""
+    time: datetime = None  # type: ignore[assignment]
+    ssl: Optional[L9SSLEvent] = None
     # Protocol-specific events
-    ssh: fields.Optional(fields.Nested(L9SSHEvent))
-    vnc: fields.Optional(fields.Nested(L9VNCEvent))
-    ftp: fields.Optional(fields.Nested(L9FTPEvent))
-    smtp: fields.Optional(fields.Nested(L9SMTPEvent))
-    telnet: fields.Optional(fields.Nested(L9TelnetEvent))
-    redis: fields.Optional(fields.Nested(L9RedisEvent))
-    mysql: fields.Optional(fields.Nested(L9MySQLEvent))
-    postgresql: fields.Optional(fields.Nested(L9PostgreSQLEvent))
-    mongodb: fields.Optional(fields.Nested(L9MongoDBEvent))
-    memcached: fields.Optional(fields.Nested(L9MemcachedEvent))
-    amqp: fields.Optional(fields.Nested(L9AMQPEvent))
-    ldap: fields.Optional(fields.Nested(L9LDAPEvent))
-    sip: fields.Optional(fields.Nested(L9SIPEvent))
-    rdp: fields.Optional(fields.Nested(L9RDPEvent))
-    dns: fields.Optional(fields.Nested(L9DNSEvent))
-    rtsp: fields.Optional(fields.Nested(L9RTSPEvent))
+    ssh: Optional[L9SSHEvent] = None
+    vnc: Optional[L9VNCEvent] = None
+    ftp: Optional[L9FTPEvent] = None
+    smtp: Optional[L9SMTPEvent] = None
+    telnet: Optional[L9TelnetEvent] = None
+    redis: Optional[L9RedisEvent] = None
+    mysql: Optional[L9MySQLEvent] = None
+    postgresql: Optional[L9PostgreSQLEvent] = None
+    mongodb: Optional[L9MongoDBEvent] = None
+    memcached: Optional[L9MemcachedEvent] = None
+    amqp: Optional[L9AMQPEvent] = None
+    ldap: Optional[L9LDAPEvent] = None
+    sip: Optional[L9SIPEvent] = None
+    rdp: Optional[L9RDPEvent] = None
+    dns: Optional[L9DNSEvent] = None
+    rtsp: Optional[L9RTSPEvent] = None
     # Service events
-    service: fields.Nested(L9ServiceEvent)
-    leak: fields.Optional(fields.Nested(L9LeakEvent))
-    tags: fields.Optional(fields.List(fields.Str()))
-    geoip: fields.Nested(GeoLocation)
-    network: fields.Nested(Network)
+    service: L9ServiceEvent = None  # type: ignore[assignment]
+    leak: Optional[L9LeakEvent] = None
+    tags: Optional[list[str]] = None
+    geoip: GeoLocation = None  # type: ignore[assignment]
+    network: Network = None  # type: ignore[assignment]
 
 
 # --- Aggregation ---
 
 
+@dataclasses.dataclass
 class L9Aggregation(Model):
-    summary: fields.Optional(fields.Str())
-    ip: fields.Str()
-    resource_id: fields.Str()
-    open_ports: fields.List(fields.Str())
-    leak_count: fields.Int()
-    leak_event_count: fields.Int()
-    events: fields.List(fields.Nested(L9Event))
-    plugins: fields.List(fields.Str())
-    geoip: fields.Nested(GeoLocation)
-    network: fields.Nested(Network)
-    creation_date: fields.DateTime()
-    update_date: fields.DateTime()
-    fresh: fields.Bool()
+    summary: Optional[str] = None
+    ip: str = ""
+    resource_id: str = ""
+    open_ports: list[str] = None  # type: ignore[assignment]
+    leak_count: int = 0
+    leak_event_count: int = 0
+    events: list[L9Event] = None  # type: ignore[assignment]
+    plugins: list[str] = None  # type: ignore[assignment]
+    geoip: GeoLocation = None  # type: ignore[assignment]
+    network: Network = None  # type: ignore[assignment]
+    creation_date: datetime = None  # type: ignore[assignment]
+    update_date: datetime = None  # type: ignore[assignment]
+    fresh: bool = False

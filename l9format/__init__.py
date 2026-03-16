@@ -33,6 +33,7 @@ from l9format.l9format import (
     ServiceCredentials,
     Software,
     SoftwareModule,
+    ValidationError,
 )
 
 __all__ = [
@@ -66,4 +67,5 @@ __all__ = [
     "ServiceCredentials",
     "Software",
     "SoftwareModule",
+    "ValidationError",
 ]
