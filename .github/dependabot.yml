@@ -3,8 +3,7 @@
 
 version: 2
 updates:
-  # Monitor pip dependencies (uv uses pip under the hood)
-  - package-ecosystem: "pip"
+  - package-ecosystem: "uv"
     directory: "/"
     schedule:
       interval: "weekly"
