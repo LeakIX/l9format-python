@@ -1,15 +1,13 @@
 [project]
 name = "l9format"
-version = "1.4.1"
+version = "2.0.0"
 license = {text = "MIT"}
 description = "l9format is a schema declaration targeted at interoperability between network recon tools used at LeakIX"
 authors = [{name = "Danny Willems", email = "danny@leakix.net"}]
 maintainers = [{name = "Danny Willems", email = "danny@leakix.net"}]
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = [
-    "serde>=0.9.0",
-]
+dependencies = []
 
 [project.urls]
 Homepage = "https://github.com/leakix/l9format-python"
@@ -48,10 +46,3 @@ warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
-# serde library lacks type stubs, so we need to ignore import errors
-ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = "l9format.l9format"
-# serde Model/Instance classes appear as Any, causing false positives
-disable_error_code = ["misc", "valid-type"]

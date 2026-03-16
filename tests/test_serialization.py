@@ -4,7 +4,6 @@ behavior across all models.
 """
 
 import json
-from decimal import Decimal as PyDecimal
 from pathlib import Path
 
 from l9format import (
@@ -20,59 +19,8 @@ from l9format import (
     Software,
     SoftwareModule,
 )
-from l9format.l9format import Decimal as DecimalField
 
 TESTS_DIR = Path(__file__).parent
-
-
-class TestDecimalField:
-    """Test the custom Decimal field serialize/deserialize paths."""
-
-    def test_serialize_without_resolution(self) -> None:
-        field = DecimalField()
-        assert field.serialize(PyDecimal("1.5")) == "1.5"
-
-    def test_serialize_with_resolution(self) -> None:
-        field = DecimalField(resolution=6)
-        assert field.serialize(PyDecimal("1.5")) == "1.500000"
-
-    def test_serialize_rounds_to_resolution(self) -> None:
-        field = DecimalField(resolution=2)
-        assert field.serialize(PyDecimal("1.555")) == "1.56"
-
-    def test_deserialize_without_resolution(self) -> None:
-        field = DecimalField()
-        result = field.deserialize("1.5")
-        assert result == PyDecimal("1.5")
-
-    def test_deserialize_with_resolution(self) -> None:
-        field = DecimalField(resolution=6)
-        result = field.deserialize("1.5")
-        assert result == PyDecimal("1.500000")
-
-    def test_deserialize_from_int(self) -> None:
-        field = DecimalField()
-        result = field.deserialize(42)
-        assert result == PyDecimal("42")
-
-    def test_deserialize_from_float(self) -> None:
-        field = DecimalField()
-        result = field.deserialize(1.5)
-        assert result == PyDecimal("1.5")
-
-    def test_round_trip_with_resolution(self) -> None:
-        field = DecimalField(resolution=6)
-        original = "1.500000"
-        deserialized = field.deserialize(original)
-        serialized = field.serialize(deserialized)
-        assert serialized == original
-
-    def test_round_trip_without_resolution(self) -> None:
-        field = DecimalField()
-        original = "3.14159"
-        deserialized = field.deserialize(original)
-        serialized = field.serialize(deserialized)
-        assert serialized == original
 
 
 class TestGeoPointRoundTrip:
