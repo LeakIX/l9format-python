@@ -8,6 +8,11 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Infrastructure
+
+- CI: move shellcheck into its own dedicated workflow, separate from changelog
+  checks ([8c9bace], [#65])
+
 ## [2.0.0] - 2026-03-16
 
 ### Changed
@@ -191,6 +196,7 @@ and this project adheres to
 <!-- Commit links -->
 
 [fa582dc]: https://github.com/LeakIX/l9format-python/commit/fa582dc
+[8c9bace]: https://github.com/LeakIX/l9format-python/commit/8c9bace
 [bc4872d]: https://github.com/LeakIX/l9format-python/commit/bc4872d
 [6c9eecd]: https://github.com/LeakIX/l9format-python/commit/6c9eecd
 [961f9ee]: https://github.com/LeakIX/l9format-python/commit/961f9ee
@@ -288,3 +294,4 @@ and this project adheres to
 [#59]: https://github.com/LeakIX/l9format-python/issues/59
 [#62]: https://github.com/LeakIX/l9format-python/pull/62
 [#43]: https://github.com/LeakIX/l9format-python/issues/43
+[#65]: https://github.com/LeakIX/l9format-python/pull/65
