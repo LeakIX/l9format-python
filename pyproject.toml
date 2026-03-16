@@ -21,11 +21,11 @@ Documentation = "https://github.com/leakix/l9format-python"
 dev = [
     "black>=26.1.0",
     "fire>=0.7.1",
-    "isort>=7.0.0",
+    "isort>=7,<9",
     "mypy>=1.19.0",
     "pip-audit>=2.10.0",
     "pytest>=9.0.2",
-    "ruff>=0.14.14",
+    "ruff>=0.14.14,<0.16.0",
 ]
 
 [build-system]
