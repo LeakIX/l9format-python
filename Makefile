@@ -1,6 +1,6 @@
 # Makefile for l9format-python project
 
-VERSION := $(shell poetry version -s)
+VERSION := $(shell python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])")
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
@@ -24,31 +24,31 @@ all: format sort lint typecheck test security-check ## Run all quality checks
 
 .PHONY: test
 test: ## Run tests using pytest
-	poetry run pytest
+	uv run pytest
 
 .PHONY: format
 format: ## Format code using black
-	poetry run black .
+	uv run black .
 
 .PHONY: check-format
 check-format: ## Check code formatting with black
-	poetry run black --check .
+	uv run black --check .
 
 .PHONY: sort
 sort: ## Sort imports using isort
-	poetry run isort .
+	uv run isort .
 
 .PHONY: check-sort
 check-sort: ## Check import sorting with isort
-	poetry run isort --check-only .
+	uv run isort --check-only .
 
 .PHONY: lint
 lint: ## Lint code using ruff
-	poetry run ruff check .
+	uv run ruff check .
 
 .PHONY: lint-fix
 lint-fix: ## Lint and fix code using ruff
-	poetry run ruff check --fix .
+	uv run ruff check --fix .
 
 .PHONY: lint-shell
 lint-shell: ## Lint shell scripts using shellcheck
@@ -56,11 +56,11 @@ lint-shell: ## Lint shell scripts using shellcheck
 
 .PHONY: typecheck
 typecheck: ## Run mypy type checker
-	poetry run mypy l9format
+	uv run mypy l9format
 
 .PHONY: security-check
 security-check: ## Check for vulnerable dependencies using pip-audit
-	poetry run pip-audit
+	uv run pip-audit
 
 .PHONY: fix-trailing-whitespace
 fix-trailing-whitespace: ## Remove trailing whitespaces from all files
@@ -97,12 +97,12 @@ check-trailing-whitespace: ## Check for trailing whitespaces in source files
 	fi
 
 .PHONY: install
-install: ## Install dependencies with Poetry
-	poetry install
+install: ## Install dependencies with uv
+	uv sync
 
 .PHONY: build
 build: clean-dist ## Build package for distribution
-	poetry build
+	uv build
 
 .PHONY: publish-dry-run
 publish-dry-run: build ## Dry-run: show what would be published
@@ -111,11 +111,11 @@ publish-dry-run: build ## Dry-run: show what would be published
 	@echo "Would create GitHub release: v$(VERSION)"
 	@echo "Package contents:"
 	@ls -lh dist/
-	poetry publish --dry-run
+	uv publish --dry-run
 
 .PHONY: publish
 publish: build ## Publish to PyPI, tag and create GitHub release
-	poetry publish
+	uv publish
 	git tag -a "v$(VERSION)" -m "Release v$(VERSION)"
 	git push origin "v$(VERSION)"
 	gh release create "v$(VERSION)" dist/* \

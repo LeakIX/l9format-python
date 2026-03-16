@@ -1,34 +1,36 @@
-[tool.poetry]
+[project]
 name = "l9format"
 version = "1.4.0"
-license = "MIT"
+license = {text = "MIT"}
 description = "l9format is a schema declaration targeted at interoperability between network recon tools used at LeakIX"
-authors = ["Danny Willems <danny@leakix.net>"]
-maintainers = ["Danny Willems <danny@leakix.net>"]
+authors = [{name = "Danny Willems", email = "danny@leakix.net"}]
+maintainers = [{name = "Danny Willems", email = "danny@leakix.net"}]
 readme = "README.md"
-homepage = "https://github.com/leakix/l9format-python"
-repository = "https://github.com/leakix/l9format-python"
-documentation = "https://github.com/leakix/l9format-python"
+requires-python = ">=3.11"
+dependencies = [
+    "serde>=0.9.0",
+]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-serde = "^0.9.0"
+[project.urls]
+Homepage = "https://github.com/leakix/l9format-python"
+Repository = "https://github.com/leakix/l9format-python"
+Documentation = "https://github.com/leakix/l9format-python"
+"Bug Tracker" = "https://github.com/leakix/l9format-python/issues"
 
-[tool.poetry.group.dev.dependencies]
-black = "^26.1.0"
-fire = "^0.7.1"
-isort = ">=7,<9"
-mypy = "^1.19.0"
-pip-audit = "^2.10.0"
-pytest = "^9.0.2"
-ruff = ">=0.14.14,<0.16.0"
+[dependency-groups]
+dev = [
+    "black>=26.1.0",
+    "fire>=0.7.1",
+    "isort>=7,<9",
+    "mypy>=1.19.0",
+    "pip-audit>=2.10.0",
+    "pytest>=9.0.2",
+    "ruff>=0.14.14,<0.16.0",
+]
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.urls]
-"Bug Tracker" = "https://github.com/leakix/l9format-python/issues"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.ruff]
 line-length = 80

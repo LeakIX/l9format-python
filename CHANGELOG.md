@@ -14,6 +14,9 @@ and this project adheres to
 - Bump ruff dev dependency from `^0.14.14` to `>=0.14.14,<0.16.0` ([ac8a1db], [#50])
 - Bump isort dev dependency from `^7.0.0` to `>=7,<9` to allow isort 8.x
   ([4464bfd], [#51])
+- Migrate from Poetry to uv: update `pyproject.toml` to PEP 621 format with
+  `hatchling` build backend, replace `poetry run` with `uv run` in Makefile,
+  and switch CI to `astral-sh/setup-uv` ([5f4fc51], [#56])
 
 ## [1.4.0] - 2026-02-09
 
@@ -161,6 +164,7 @@ and this project adheres to
 <!-- Commit links -->
 
 [6c9eecd]: https://github.com/LeakIX/l9format-python/commit/6c9eecd
+[5f4fc51]: https://github.com/LeakIX/l9format-python/commit/5f4fc51
 [ac8a1db]: https://github.com/LeakIX/l9format-python/commit/ac8a1db
 [4464bfd]: https://github.com/LeakIX/l9format-python/commit/4464bfd
 [ac4744e]: https://github.com/LeakIX/l9format-python/commit/ac4744e
@@ -248,5 +252,6 @@ and this project adheres to
 [#32]: https://github.com/LeakIX/l9format-python/issues/32
 [#49]: https://github.com/LeakIX/l9format-python/pull/49
 [#50]: https://github.com/LeakIX/l9format-python/pull/50
-[#43]: https://github.com/LeakIX/l9format-python/issues/43
 [#51]: https://github.com/LeakIX/l9format-python/pull/51
+[#56]: https://github.com/LeakIX/l9format-python/pull/56
+[#43]: https://github.com/LeakIX/l9format-python/issues/43

@@ -3,7 +3,7 @@
 
 version: 2
 updates:
-  # Monitor pip dependencies (Poetry uses pip under the hood)
+  # Monitor pip dependencies (uv uses pip under the hood)
   - package-ecosystem: "pip"
     directory: "/"
     schedule:

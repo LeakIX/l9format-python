@@ -7,30 +7,26 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.11", "3.12", "3.13"]
-        poetry-version: ["2.3.1"]
         os: ["ubuntu-latest", "macos-latest", "windows-latest"]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install poetry
-        run: pip install poetry==${{ matrix.poetry-version }}
-      - name: View poetry --help
-        run: poetry --help
-      - name: Run poetry install
-        run: poetry install
+      - name: Install dependencies
+        run: uv sync
       - name: lint
-        run: poetry run ruff check .
+        run: uv run ruff check .
       - name: format check
-        run: poetry run black --check .
+        run: uv run black --check .
       - name: sort-check
-        run: poetry run isort --check-only .
+        run: uv run isort --check-only .
       - name: typecheck
-        run: poetry run mypy l9format
+        run: uv run mypy l9format
       - name: test
-        run: poetry run pytest
+        run: uv run pytest
       - name: security-audit
-        run: poetry run pip-audit
+        run: uv run pip-audit
 
