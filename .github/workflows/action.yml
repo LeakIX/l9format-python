@@ -15,18 +15,21 @@ jobs:
         uses: astral-sh/setup-uv@v6
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Install gsed (macOS)
+        if: runner.os == 'macOS'
+        run: brew install gnu-sed
       - name: Install dependencies
-        run: uv sync
+        run: make install
       - name: lint
-        run: uv run ruff check .
+        run: make lint
       - name: format check
-        run: uv run black --check .
+        run: make check-format
       - name: sort-check
-        run: uv run isort --check-only .
+        run: make check-sort
       - name: typecheck
-        run: uv run mypy l9format
+        run: make typecheck
       - name: test
-        run: uv run pytest
+        run: make test
       - name: security-audit
-        run: uv run pip-audit
+        run: make security-check
 
