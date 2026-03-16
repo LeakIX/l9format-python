@@ -8,6 +8,10 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Infrastructure
+
+- CI: bump astral-sh/setup-uv from 6 to 7 ([c9216ba], [#64])
+
 ## [2.0.0] - 2026-03-16
 
 ### Changed
@@ -190,6 +194,7 @@ and this project adheres to
 
 <!-- Commit links -->
 
+[c9216ba]: https://github.com/LeakIX/l9format-python/commit/c9216ba
 [fa582dc]: https://github.com/LeakIX/l9format-python/commit/fa582dc
 [bc4872d]: https://github.com/LeakIX/l9format-python/commit/bc4872d
 [6c9eecd]: https://github.com/LeakIX/l9format-python/commit/6c9eecd
@@ -287,4 +292,5 @@ and this project adheres to
 [#58]: https://github.com/LeakIX/l9format-python/pull/58
 [#59]: https://github.com/LeakIX/l9format-python/issues/59
 [#62]: https://github.com/LeakIX/l9format-python/pull/62
+[#64]: https://github.com/LeakIX/l9format-python/pull/64
 [#43]: https://github.com/LeakIX/l9format-python/issues/43
