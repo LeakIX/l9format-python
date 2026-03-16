@@ -1,0 +1,64 @@
+name: CI per commit (labeled PRs)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check-label:
+    name: Check for ci:per-commit label
+    runs-on: ubuntu-latest
+    outputs:
+      has_label: ${{ steps.check.outputs.has_label }}
+    steps:
+      - name: Find associated PR and check label
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PRS=$(gh api \
+            "repos/${{ github.repository }}/commits/${{ github.sha }}/pulls" \
+            --jq '.[].number')
+          HAS_LABEL="false"
+          for pr in $PRS; do
+            LABELS=$(gh api \
+              "repos/${{ github.repository }}/pulls/${pr}" \
+              --jq '.labels[].name')
+            if echo "$LABELS" | grep -q "^ci:per-commit$"; then
+              HAS_LABEL="true"
+              break
+            fi
+          done
+          echo "has_label=${HAS_LABEL}" >> "$GITHUB_OUTPUT"
+
+  ci:
+    name: CI
+    needs: check-label
+    if: needs.check-label.outputs.has_label == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+        os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: uv sync
+      - name: lint
+        run: uv run ruff check .
+      - name: format check
+        run: uv run black --check .
+      - name: sort-check
+        run: uv run isort --check-only .
+      - name: typecheck
+        run: uv run mypy l9format
+      - name: test
+        run: uv run pytest
+      - name: security-audit
+        run: uv run pip-audit

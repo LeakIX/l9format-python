@@ -17,6 +17,8 @@ and this project adheres to
 - Migrate from Poetry to uv: update `pyproject.toml` to PEP 621 format with
   `hatchling` build backend, replace `poetry run` with `uv run` in Makefile,
   and switch CI to `astral-sh/setup-uv` ([5f4fc51], [#56])
+- CI: add per-commit workflow triggered by `ci:per-commit` label for easier
+  bisect and revert ([bc4872d], [#59])
 
 ## [1.4.0] - 2026-02-09
 
@@ -163,6 +165,7 @@ and this project adheres to
 
 <!-- Commit links -->
 
+[bc4872d]: https://github.com/LeakIX/l9format-python/commit/bc4872d
 [6c9eecd]: https://github.com/LeakIX/l9format-python/commit/6c9eecd
 [5f4fc51]: https://github.com/LeakIX/l9format-python/commit/5f4fc51
 [ac8a1db]: https://github.com/LeakIX/l9format-python/commit/ac8a1db
@@ -254,4 +257,5 @@ and this project adheres to
 [#50]: https://github.com/LeakIX/l9format-python/pull/50
 [#51]: https://github.com/LeakIX/l9format-python/pull/51
 [#56]: https://github.com/LeakIX/l9format-python/pull/56
+[#59]: https://github.com/LeakIX/l9format-python/issues/59
 [#43]: https://github.com/LeakIX/l9format-python/issues/43
