@@ -21,6 +21,7 @@ and this project adheres to
   bisect and revert ([bc4872d], [#59])
 - CI: use Makefile targets in workflows and add sequential per-commit testing
   ([fa582dc], [#62])
+- CI: bump astral-sh/setup-uv from 6 to 7 ([961f9ee], [#58])
 
 ## [1.4.0] - 2026-02-09
 
@@ -170,6 +171,7 @@ and this project adheres to
 [fa582dc]: https://github.com/LeakIX/l9format-python/commit/fa582dc
 [bc4872d]: https://github.com/LeakIX/l9format-python/commit/bc4872d
 [6c9eecd]: https://github.com/LeakIX/l9format-python/commit/6c9eecd
+[961f9ee]: https://github.com/LeakIX/l9format-python/commit/961f9ee
 [5f4fc51]: https://github.com/LeakIX/l9format-python/commit/5f4fc51
 [ac8a1db]: https://github.com/LeakIX/l9format-python/commit/ac8a1db
 [4464bfd]: https://github.com/LeakIX/l9format-python/commit/4464bfd
@@ -260,6 +262,7 @@ and this project adheres to
 [#50]: https://github.com/LeakIX/l9format-python/pull/50
 [#51]: https://github.com/LeakIX/l9format-python/pull/51
 [#56]: https://github.com/LeakIX/l9format-python/pull/56
+[#58]: https://github.com/LeakIX/l9format-python/pull/58
 [#59]: https://github.com/LeakIX/l9format-python/issues/59
 [#62]: https://github.com/LeakIX/l9format-python/pull/62
 [#43]: https://github.com/LeakIX/l9format-python/issues/43
