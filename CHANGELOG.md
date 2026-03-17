@@ -8,6 +8,11 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- Use explicit include lists instead of exclude lists for hatch build targets
+  (sdist and wheel) in `pyproject.toml` ([953d604], [#67])
+
 ### Infrastructure
 
 - CI: move shellcheck into its own dedicated workflow, separate from changelog
@@ -196,6 +201,7 @@ and this project adheres to
 
 <!-- Commit links -->
 
+[953d604]: https://github.com/LeakIX/l9format-python/commit/953d604
 [72bf877]: https://github.com/LeakIX/l9format-python/commit/72bf877
 [c9216ba]: https://github.com/LeakIX/l9format-python/commit/c9216ba
 [fa582dc]: https://github.com/LeakIX/l9format-python/commit/fa582dc
@@ -297,4 +303,5 @@ and this project adheres to
 [#62]: https://github.com/LeakIX/l9format-python/pull/62
 [#64]: https://github.com/LeakIX/l9format-python/pull/64
 [#65]: https://github.com/LeakIX/l9format-python/pull/65
+[#67]: https://github.com/LeakIX/l9format-python/pull/67
 [#43]: https://github.com/LeakIX/l9format-python/issues/43

@@ -30,6 +30,12 @@ dev = [
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.hatch.build.targets.sdist]
+include = ["l9format/", "LICENSE", "README.md", "pyproject.toml"]
+
+[tool.hatch.build.targets.wheel]
+include = ["l9format/"]
+
 [tool.ruff]
 line-length = 80
 
