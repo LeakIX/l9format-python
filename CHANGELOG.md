@@ -8,6 +8,10 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Infrastructure
+
+- CI: add PR hygiene checks using dannywillems/toolbox ([a4c3b19], [#69])
+
 ## [2.0.1] - 2026-03-17
 
 ### Changed
@@ -204,6 +208,7 @@ and this project adheres to
 
 <!-- Commit links -->
 
+[a4c3b19]: https://github.com/LeakIX/l9format-python/commit/a4c3b19
 [953d604]: https://github.com/LeakIX/l9format-python/commit/953d604
 [72bf877]: https://github.com/LeakIX/l9format-python/commit/72bf877
 [c9216ba]: https://github.com/LeakIX/l9format-python/commit/c9216ba
@@ -307,4 +312,5 @@ and this project adheres to
 [#64]: https://github.com/LeakIX/l9format-python/pull/64
 [#65]: https://github.com/LeakIX/l9format-python/pull/65
 [#67]: https://github.com/LeakIX/l9format-python/pull/67
+[#69]: https://github.com/LeakIX/l9format-python/pull/69
 [#43]: https://github.com/LeakIX/l9format-python/issues/43
