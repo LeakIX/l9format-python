@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [2.0.1] - 2026-03-17
+
 ### Changed
 
 - Use explicit include lists instead of exclude lists for hatch build targets
@@ -190,7 +192,8 @@ and this project adheres to
 
 <!-- Version links -->
 
-[Unreleased]: https://github.com/LeakIX/l9format-python/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/LeakIX/l9format-python/compare/v2.0.1...HEAD
+[2.0.1]: https://github.com/LeakIX/l9format-python/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/LeakIX/l9format-python/compare/v1.4.1...v2.0.0
 [1.4.1]: https://github.com/LeakIX/l9format-python/compare/1.4.0...1.4.1
 [1.4.0]: https://github.com/LeakIX/l9format-python/compare/1.3.2...1.4.0
