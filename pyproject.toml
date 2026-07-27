@@ -17,13 +17,17 @@ Documentation = "https://github.com/leakix/l9format-python"
 
 [dependency-groups]
 dev = [
-    "black>=26.1.0",
-    "fire>=0.7.1",
-    "isort>=7,<9",
-    "mypy>=1.19.0",
-    "pip-audit>=2.10.0",
-    "pytest>=9.0.2",
-    "ruff>=0.14.14,<0.16.0",
+    "pytest>=9.1.1",
+    "hypothesis>=6.161.6",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.16.0",
+    "mypy>=2.3.0",
+    "pip-audit>=2.10.1",
+    "cyclonedx-bom>=7.3.1",
+    "nox>=2026.7.11",
+    "zizmor>=1.28.0",
+    "mkdocs-material>=9.7.7",
+    "mkdocstrings[python]>=1.0.6",
 ]
 
 [build-system]
@@ -38,17 +42,40 @@ include = ["l9format/"]
 
 [tool.ruff]
 line-length = 80
+target-version = "py311"
 
-[tool.black]
-line-length = 80
+[tool.ruff.lint]
+select = [
+    "E", "F", "I", "N", "W", "UP", "B", "C4", "SIM",
+    "S", "ASYNC", "PT", "PTH", "PIE", "RET", "ARG", "ERA", "RUF",
+    "PLC", "PLE", "PLW",
+]
 
-[tool.isort]
-profile = "black"
-line_length = 80
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "ARG001", "ARG002", "PLW", "PTH123", "PLC0415"]
+
+[tool.ruff.format]
+quote-style = "double"
 
 [tool.mypy]
 python_version = "3.11"
+strict = true
 warn_return_any = true
 warn_unused_configs = true
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
+warn_unused_ignores = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["l9format"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+exclude_also = [
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+    "@(abc\\.)?abstractmethod",
+]
