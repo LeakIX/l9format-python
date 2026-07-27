@@ -11,6 +11,10 @@ and this project adheres to
 ### Infrastructure
 
 - CI: add PR hygiene checks using dannywillems/toolbox ([a4c3b19], [#69])
+- CI: complete the uv migration and add the common tooling: coverage gate,
+  zizmor workflow security scanning, TruffleHog secret scanning, CycloneDX
+  SBOM, nox multi-version testing, and a mkdocs documentation site
+  ([430ac97])
 
 ## [2.0.1] - 2026-03-17
 
@@ -209,6 +213,7 @@ and this project adheres to
 <!-- Commit links -->
 
 [a4c3b19]: https://github.com/LeakIX/l9format-python/commit/a4c3b19
+[430ac97]: https://github.com/LeakIX/l9format-python/commit/430ac97
 [953d604]: https://github.com/LeakIX/l9format-python/commit/953d604
 [72bf877]: https://github.com/LeakIX/l9format-python/commit/72bf877
 [c9216ba]: https://github.com/LeakIX/l9format-python/commit/c9216ba
