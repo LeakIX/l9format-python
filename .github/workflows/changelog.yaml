@@ -7,12 +7,15 @@ on:
   merge_group:
     types: [checks_requested]
 
+permissions:
+  contents: read
+
 jobs:
   check-changelog:
     name: Check changelog action
     runs-on: ubuntu-latest
     steps:
-      - uses: tarides/changelog-check-action@v4
+      - uses: tarides/changelog-check-action@8f47e0becbfa549e4c82a3f562aa6f90d2c2ee8c # v4
         with:
           changelog: CHANGELOG.md
 
@@ -20,11 +23,11 @@ jobs:
     name: Check changelog is in dedicated commit
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          persist-credentials: false
       - name: Verify CHANGELOG.md changes are in own commit
-        run: >
-          .github/scripts/check-changelog-commit.sh
-          "${{ github.event.pull_request.base.sha }}"
-
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: .github/scripts/check-changelog-commit.sh "$BASE_SHA"

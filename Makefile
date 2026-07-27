@@ -19,48 +19,75 @@ help: ## Show this help
 		awk 'BEGIN {FS = ":.*?## "}; \
 		{printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-.PHONY: all
-all: format sort lint typecheck test security-check ## Run all quality checks
+.PHONY: setup
+setup: ## Setup development environment
+	uv sync
 
-.PHONY: test
-test: ## Run tests using pytest
-	uv run pytest
+.PHONY: install
+install: ## Install dependencies with uv
+	uv sync
 
 .PHONY: format
-format: ## Format code using black
-	uv run black .
+format: ## Format code
+	uv run ruff format l9format tests
+	uv run ruff check --fix l9format tests
 
 .PHONY: check-format
-check-format: ## Check code formatting with black
-	uv run black --check .
-
-.PHONY: sort
-sort: ## Sort imports using isort
-	uv run isort .
-
-.PHONY: check-sort
-check-sort: ## Check import sorting with isort
-	uv run isort --check-only .
+check-format: ## Check code formatting
+	uv run ruff format --check l9format tests
+	uv run ruff check l9format tests
 
 .PHONY: lint
-lint: ## Lint code using ruff
-	uv run ruff check .
+lint: ## Run linter
+	uv run ruff check l9format tests
 
-.PHONY: lint-fix
-lint-fix: ## Lint and fix code using ruff
-	uv run ruff check --fix .
+.PHONY: typecheck
+typecheck: ## Run type checker
+	uv run mypy l9format
+
+.PHONY: test
+test: ## Run tests
+	uv run pytest
+
+.PHONY: coverage
+coverage: ## Run tests with coverage (fails under 90%)
+	uv run pytest --cov=l9format --cov-report=term-missing \
+		--cov-report=xml --cov-fail-under=90
+
+.PHONY: test-all
+test-all: ## Run tests across all supported Python versions (nox)
+	uv run nox -s tests
+
+.PHONY: audit
+audit: ## Audit dependencies for known vulnerabilities
+	uv run pip-audit --skip-editable --progress-spinner=off
+
+.PHONY: zizmor
+zizmor: ## Audit GitHub Actions workflows for security issues
+	uv run zizmor --offline .github/workflows/
+
+.PHONY: sbom
+sbom: ## Generate a CycloneDX SBOM of runtime dependencies
+	uv export --format requirements-txt --no-dev --no-emit-project \
+		--no-hashes -o sbom-requirements.txt
+	uv run cyclonedx-py requirements sbom-requirements.txt \
+		-o sbom.cdx.json
+	rm -f sbom-requirements.txt
+
+.PHONY: docs
+docs: ## Build the documentation site (strict)
+	uv run mkdocs build --strict
+
+.PHONY: docs-serve
+docs-serve: ## Serve the documentation locally
+	uv run mkdocs serve
 
 .PHONY: lint-shell
 lint-shell: ## Lint shell scripts using shellcheck
 	shellcheck .github/scripts/*.sh
 
-.PHONY: typecheck
-typecheck: ## Run mypy type checker
-	uv run mypy l9format
-
-.PHONY: security-check
-security-check: ## Check for vulnerable dependencies using pip-audit
-	uv run pip-audit
+.PHONY: check
+check: check-format lint typecheck coverage ## Run all checks
 
 .PHONY: fix-trailing-whitespace
 fix-trailing-whitespace: ## Remove trailing whitespaces from all files
@@ -72,7 +99,7 @@ fix-trailing-whitespace: ## Remove trailing whitespaces from all files
 		-not -path "./.venv/*" \
 		-not -path "./__pycache__/*" \
 		-exec sh -c \
-			'echo "Processing: $$1"; $(SED) -i -e "s/[[:space:]]*$$//" "$$1"' \
+			'$(SED) -i -e "s/[[:space:]]*$$//" "$$1"' \
 			_ {} \; && \
 		echo "Trailing whitespaces removed."
 
@@ -96,10 +123,6 @@ check-trailing-whitespace: ## Check for trailing whitespaces in source files
 		echo "No trailing whitespaces found."; \
 	fi
 
-.PHONY: install
-install: ## Install dependencies with uv
-	uv sync
-
 .PHONY: build
 build: clean-dist ## Build package for distribution
 	uv build
@@ -114,11 +137,11 @@ publish-dry-run: build ## Dry-run: show what would be published
 	uv publish --dry-run
 
 .PHONY: publish
-publish: build ## Publish to PyPI, tag and create GitHub release
+publish: build sbom ## Publish to PyPI, tag and create GitHub release
 	uv publish
 	git tag -a "v$(VERSION)" -m "Release v$(VERSION)"
 	git push origin "v$(VERSION)"
-	gh release create "v$(VERSION)" dist/* \
+	gh release create "v$(VERSION)" dist/* sbom.cdx.json \
 		--title "v$(VERSION)" \
 		--notes "Release v$(VERSION)"
 
@@ -128,6 +151,7 @@ clean-dist: ## Clean distribution artifacts
 
 .PHONY: clean
 clean: clean-dist ## Clean build artifacts and caches
-	rm -rf __pycache__ .pytest_cache .mypy_cache .ruff_cache
+	rm -rf .pytest_cache .mypy_cache .ruff_cache .nox site \
+		.coverage coverage.xml sbom.cdx.json
 	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
 	find . -type f -name "*.pyc" -delete 2>/dev/null || true

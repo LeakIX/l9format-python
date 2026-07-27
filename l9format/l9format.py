@@ -1,8 +1,11 @@
 import dataclasses
 import decimal
+import json
+import types
+import typing
 from collections import OrderedDict
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any, Union, get_args, get_origin
 
 
 class ValidationError(Exception):
@@ -21,20 +24,15 @@ def round_decimal(
 
 
 def _is_optional(tp: Any) -> bool:
-    """Check if a type annotation is Optional[X]."""
-    from typing import Union, get_args, get_origin
-
-    if get_origin(tp) is Union:
-        args = get_args(tp)
-        return type(None) in args
+    """Check if a type annotation is Optional[X] or X | None."""
+    if get_origin(tp) in (Union, types.UnionType):
+        return type(None) in get_args(tp)
     return False
 
 
 def _unwrap_optional(tp: Any) -> Any:
-    """Extract X from Optional[X]."""
-    from typing import Union, get_args, get_origin
-
-    if get_origin(tp) is Union:
+    """Extract X from Optional[X] or X | None."""
+    if get_origin(tp) in (Union, types.UnionType):
         args = get_args(tp)
         for arg in args:
             if arg is not type(None):
@@ -49,8 +47,6 @@ def _deserialize_value(value: object, tp: Any) -> object:
 
     if _is_optional(tp):
         tp = _unwrap_optional(tp)
-
-    from typing import get_args, get_origin
 
     origin = get_origin(tp)
 
@@ -80,8 +76,7 @@ def _deserialize_value(value: object, tp: Any) -> object:
     if isinstance(tp, type) and issubclass(tp, Model):
         if not isinstance(value, dict):
             raise ValidationError(
-                f"expected dict for nested model, "
-                f"got {type(value).__name__}",
+                f"expected dict for nested model, got {type(value).__name__}",
                 value,
             )
         return tp.from_dict(value)
@@ -89,7 +84,7 @@ def _deserialize_value(value: object, tp: Any) -> object:
     if isinstance(tp, type) and issubclass(tp, datetime):
         if not isinstance(value, str):
             raise ValidationError(
-                f"expected string for datetime, " f"got {type(value).__name__}",
+                f"expected string for datetime, got {type(value).__name__}",
                 value,
             )
         if not value:
@@ -115,7 +110,7 @@ class Model:
     __dataclass_fields__: dict[str, dataclasses.Field[Any]]
 
     @classmethod
-    def from_dict(cls, d: dict) -> "Model":
+    def from_dict(cls, d: dict[str, Any]) -> "Model":
         if not isinstance(d, dict):
             raise ValidationError(f"expected dict, got {type(d).__name__}", d)
         kwargs: dict[str, Any] = {}
@@ -151,8 +146,8 @@ class Model:
 
         return cls(**kwargs)
 
-    def to_dict(self) -> OrderedDict:
-        result: OrderedDict = OrderedDict()
+    def to_dict(self) -> "OrderedDict[str, Any]":
+        result: OrderedDict[str, Any] = OrderedDict()
         hints = self.__class__._get_type_hints()
         for f in self.__class__.__dataclass_fields__.values():
             value = getattr(self, f.name)
@@ -163,7 +158,7 @@ class Model:
             result[f.name] = self._serialize_field(value, tp)
         return result
 
-    def _serialize_field(self, value: object, tp: Any) -> object:
+    def _serialize_field(self, value: object, _tp: Any) -> object:
         if value is None:
             return None
         if isinstance(value, Model):
@@ -182,19 +177,13 @@ class Model:
 
     @classmethod
     def _get_type_hints(cls) -> dict[str, Any]:
-        import typing
-
         return typing.get_type_hints(cls)
 
     def to_json(self, **kwargs: Any) -> str:
-        import json
-
         return json.dumps(self.to_dict(), **kwargs)
 
     @classmethod
     def from_json(cls, s: str, **kwargs: Any) -> "Model":
-        import json
-
         return cls.from_dict(json.loads(s, **kwargs))
 
 
@@ -221,13 +210,13 @@ class GeoPoint(Model):
 
 @dataclasses.dataclass
 class GeoLocation(Model):
-    continent_name: Optional[str] = None
-    region_iso_code: Optional[str] = None
-    city_name: Optional[str] = None
-    country_iso_code: Optional[str] = None
-    country_name: Optional[str] = None
-    region_name: Optional[str] = None
-    location: Optional[GeoPoint] = None
+    continent_name: str | None = None
+    region_iso_code: str | None = None
+    city_name: str | None = None
+    country_iso_code: str | None = None
+    country_name: str | None = None
+    region_name: str | None = None
+    location: GeoPoint | None = None
 
 
 @dataclasses.dataclass
@@ -240,7 +229,7 @@ class Network(Model):
 @dataclasses.dataclass
 class Certificate(Model):
     cn: str = ""
-    domain: Optional[list[str]] = None
+    domain: list[str] | None = None
     fingerprint: str = ""
     key_algo: str = ""
     key_size: int = 0
@@ -262,7 +251,7 @@ class Software(Model):
     name: str = ""
     version: str = ""
     os: str = ""
-    modules: Optional[list[SoftwareModule]] = None
+    modules: list[SoftwareModule] | None = None
     fingerprint: str = ""
 
 
@@ -272,7 +261,7 @@ class ServiceCredentials(Model):
     username: str = ""
     password: str = ""
     key: str = ""
-    raw: Optional[str] = None
+    raw: str | None = None
 
 
 @dataclasses.dataclass
@@ -282,7 +271,7 @@ class DatasetSummary(Model):
     size: int = 0
     collections: int = 0
     infected: bool = False
-    ransom_notes: Optional[list[str]] = None
+    ransom_notes: list[str] | None = None
 
 
 # --- Service Events ---
@@ -294,7 +283,7 @@ class L9HttpEvent(Model):
     url: str = ""
     status: int = 0
     length: int = 0
-    header: Optional[dict[str, str]] = None
+    header: dict[str, str] | None = None
     title: str = ""
     favicon_hash: str = ""
 
@@ -328,150 +317,150 @@ class L9LeakEvent(Model):
 
 @dataclasses.dataclass
 class L9SSHEvent(Model):
-    fingerprint: Optional[str] = None
-    version: Optional[int] = None
-    banner: Optional[str] = None
-    motd: Optional[str] = None
-    key_type: Optional[str] = None
-    key: Optional[str] = None
-    kex_algorithms: Optional[list[str]] = None
-    host_key_algorithms: Optional[list[str]] = None
-    encryption_algorithms: Optional[list[str]] = None
-    mac_algorithms: Optional[list[str]] = None
-    compression_algorithms: Optional[list[str]] = None
-    auth_methods: Optional[list[str]] = None
+    fingerprint: str | None = None
+    version: int | None = None
+    banner: str | None = None
+    motd: str | None = None
+    key_type: str | None = None
+    key: str | None = None
+    kex_algorithms: list[str] | None = None
+    host_key_algorithms: list[str] | None = None
+    encryption_algorithms: list[str] | None = None
+    mac_algorithms: list[str] | None = None
+    compression_algorithms: list[str] | None = None
+    auth_methods: list[str] | None = None
 
 
 @dataclasses.dataclass
 class L9VNCEvent(Model):
-    version: Optional[str] = None
-    security_types: Optional[list[str]] = None
-    noauth: Optional[bool] = None
+    version: str | None = None
+    security_types: list[str] | None = None
+    noauth: bool | None = None
 
 
 @dataclasses.dataclass
 class L9FTPEvent(Model):
-    banner: Optional[str] = None
-    tls_supported: Optional[bool] = None
-    anonymous: Optional[bool] = None
+    banner: str | None = None
+    tls_supported: bool | None = None
+    anonymous: bool | None = None
 
 
 @dataclasses.dataclass
 class L9SMTPEvent(Model):
-    banner: Optional[str] = None
-    starttls: Optional[bool] = None
-    extensions: Optional[list[str]] = None
+    banner: str | None = None
+    starttls: bool | None = None
+    extensions: list[str] | None = None
 
 
 @dataclasses.dataclass
 class L9TelnetEvent(Model):
-    banner: Optional[str] = None
-    options: Optional[list[str]] = None
-    auth_required: Optional[bool] = None
+    banner: str | None = None
+    options: list[str] | None = None
+    auth_required: bool | None = None
 
 
 @dataclasses.dataclass
 class L9RedisEvent(Model):
-    version: Optional[str] = None
-    mode: Optional[str] = None
-    os: Optional[str] = None
-    auth_required: Optional[bool] = None
+    version: str | None = None
+    mode: str | None = None
+    os: str | None = None
+    auth_required: bool | None = None
 
 
 @dataclasses.dataclass
 class L9MySQLEvent(Model):
-    version: Optional[str] = None
-    protocol_version: Optional[int] = None
-    auth_plugin: Optional[str] = None
-    server_status: Optional[str] = None
+    version: str | None = None
+    protocol_version: int | None = None
+    auth_plugin: str | None = None
+    server_status: str | None = None
 
 
 @dataclasses.dataclass
 class L9PostgreSQLEvent(Model):
-    version: Optional[str] = None
-    databases: Optional[list[str]] = None
-    ssl_enabled: Optional[bool] = None
-    auth_method: Optional[str] = None
-    server_encoding: Optional[str] = None
-    client_encoding: Optional[str] = None
-    timezone: Optional[str] = None
-    max_connections: Optional[int] = None
+    version: str | None = None
+    databases: list[str] | None = None
+    ssl_enabled: bool | None = None
+    auth_method: str | None = None
+    server_encoding: str | None = None
+    client_encoding: str | None = None
+    timezone: str | None = None
+    max_connections: int | None = None
 
 
 @dataclasses.dataclass
 class L9MongoDBEvent(Model):
-    version: Optional[str] = None
-    databases: Optional[list[str]] = None
-    auth_required: Optional[bool] = None
-    wire_version: Optional[int] = None
+    version: str | None = None
+    databases: list[str] | None = None
+    auth_required: bool | None = None
+    wire_version: int | None = None
 
 
 @dataclasses.dataclass
 class L9MemcachedEvent(Model):
-    version: Optional[str] = None
-    libevent: Optional[str] = None
-    curr_items: Optional[int] = None
-    total_items: Optional[int] = None
-    bytes: Optional[int] = None
-    max_bytes: Optional[int] = None
-    cmd_get: Optional[int] = None
-    cmd_set: Optional[int] = None
-    get_hits: Optional[int] = None
-    get_misses: Optional[int] = None
-    threads: Optional[int] = None
+    version: str | None = None
+    libevent: str | None = None
+    curr_items: int | None = None
+    total_items: int | None = None
+    bytes: int | None = None
+    max_bytes: int | None = None
+    cmd_get: int | None = None
+    cmd_set: int | None = None
+    get_hits: int | None = None
+    get_misses: int | None = None
+    threads: int | None = None
 
 
 @dataclasses.dataclass
 class L9AMQPEvent(Model):
-    protocol_major: Optional[int] = None
-    protocol_minor: Optional[int] = None
-    product: Optional[str] = None
-    version: Optional[str] = None
-    platform: Optional[str] = None
+    protocol_major: int | None = None
+    protocol_minor: int | None = None
+    product: str | None = None
+    version: str | None = None
+    platform: str | None = None
 
 
 @dataclasses.dataclass
 class L9LDAPEvent(Model):
-    naming_contexts: Optional[list[str]] = None
-    supported_versions: Optional[list[str]] = None
-    vendor_name: Optional[str] = None
-    vendor_version: Optional[str] = None
-    supported_sasl: Optional[list[str]] = None
-    anonymous_bind: Optional[bool] = None
-    can_enumerate: Optional[bool] = None
+    naming_contexts: list[str] | None = None
+    supported_versions: list[str] | None = None
+    vendor_name: str | None = None
+    vendor_version: str | None = None
+    supported_sasl: list[str] | None = None
+    anonymous_bind: bool | None = None
+    can_enumerate: bool | None = None
 
 
 @dataclasses.dataclass
 class L9SIPEvent(Model):
-    version: Optional[str] = None
-    user_agent: Optional[str] = None
-    server: Optional[str] = None
-    allow: Optional[list[str]] = None
-    supported: Optional[list[str]] = None
+    version: str | None = None
+    user_agent: str | None = None
+    server: str | None = None
+    allow: list[str] | None = None
+    supported: list[str] | None = None
 
 
 @dataclasses.dataclass
 class L9RDPEvent(Model):
-    product_version: Optional[str] = None
-    nla_required: Optional[bool] = None
-    ssl_enabled: Optional[bool] = None
-    hostname: Optional[str] = None
+    product_version: str | None = None
+    nla_required: bool | None = None
+    ssl_enabled: bool | None = None
+    hostname: str | None = None
 
 
 @dataclasses.dataclass
 class L9DNSEvent(Model):
-    software: Optional[str] = None
-    version: Optional[str] = None
-    recursion: Optional[bool] = None
-    dnssec: Optional[bool] = None
-    zone_transfer: Optional[bool] = None
-    nameservers: Optional[list[str]] = None
+    software: str | None = None
+    version: str | None = None
+    recursion: bool | None = None
+    dnssec: bool | None = None
+    zone_transfer: bool | None = None
+    nameservers: list[str] | None = None
 
 
 @dataclasses.dataclass
 class L9RTSPEvent(Model):
-    server: Optional[str] = None
-    methods: Optional[list[str]] = None
+    server: str | None = None
+    methods: list[str] | None = None
 
 
 # --- Main Event ---
@@ -481,41 +470,41 @@ class L9RTSPEvent(Model):
 class L9Event(Model):
     event_type: str = ""
     event_source: str = ""
-    event_pipeline: Optional[list[str]] = None
-    event_fingerprint: Optional[str] = None
+    event_pipeline: list[str] | None = None
+    event_fingerprint: str | None = None
     ip: str = ""
     port: str = ""
     host: str = ""
     reverse: str = ""
-    mac: Optional[str] = None
-    vendor: Optional[str] = None
-    transport: Optional[list[str]] = None
+    mac: str | None = None
+    vendor: str | None = None
+    transport: list[str] | None = None
     protocol: str = ""
     http: L9HttpEvent = None  # type: ignore[assignment]
     summary: str = ""
     time: datetime = None  # type: ignore[assignment]
-    ssl: Optional[L9SSLEvent] = None
+    ssl: L9SSLEvent | None = None
     # Protocol-specific events
-    ssh: Optional[L9SSHEvent] = None
-    vnc: Optional[L9VNCEvent] = None
-    ftp: Optional[L9FTPEvent] = None
-    smtp: Optional[L9SMTPEvent] = None
-    telnet: Optional[L9TelnetEvent] = None
-    redis: Optional[L9RedisEvent] = None
-    mysql: Optional[L9MySQLEvent] = None
-    postgresql: Optional[L9PostgreSQLEvent] = None
-    mongodb: Optional[L9MongoDBEvent] = None
-    memcached: Optional[L9MemcachedEvent] = None
-    amqp: Optional[L9AMQPEvent] = None
-    ldap: Optional[L9LDAPEvent] = None
-    sip: Optional[L9SIPEvent] = None
-    rdp: Optional[L9RDPEvent] = None
-    dns: Optional[L9DNSEvent] = None
-    rtsp: Optional[L9RTSPEvent] = None
+    ssh: L9SSHEvent | None = None
+    vnc: L9VNCEvent | None = None
+    ftp: L9FTPEvent | None = None
+    smtp: L9SMTPEvent | None = None
+    telnet: L9TelnetEvent | None = None
+    redis: L9RedisEvent | None = None
+    mysql: L9MySQLEvent | None = None
+    postgresql: L9PostgreSQLEvent | None = None
+    mongodb: L9MongoDBEvent | None = None
+    memcached: L9MemcachedEvent | None = None
+    amqp: L9AMQPEvent | None = None
+    ldap: L9LDAPEvent | None = None
+    sip: L9SIPEvent | None = None
+    rdp: L9RDPEvent | None = None
+    dns: L9DNSEvent | None = None
+    rtsp: L9RTSPEvent | None = None
     # Service events
     service: L9ServiceEvent = None  # type: ignore[assignment]
-    leak: Optional[L9LeakEvent] = None
-    tags: Optional[list[str]] = None
+    leak: L9LeakEvent | None = None
+    tags: list[str] | None = None
     geoip: GeoLocation = None  # type: ignore[assignment]
     network: Network = None  # type: ignore[assignment]
 
@@ -525,7 +514,7 @@ class L9Event(Model):
 
 @dataclasses.dataclass
 class L9Aggregation(Model):
-    summary: Optional[str] = None
+    summary: str | None = None
     ip: str = ""
     resource_id: str = ""
     open_ports: list[str] = None  # type: ignore[assignment]

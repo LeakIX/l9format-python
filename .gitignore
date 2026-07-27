@@ -129,4 +129,5 @@ dmypy.json
 .pyre/
 
 .idea
-uv.lock
+uv.locksite/
+sbom.cdx.json
