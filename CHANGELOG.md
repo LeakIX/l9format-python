@@ -15,6 +15,7 @@ and this project adheres to
   zizmor workflow security scanning, TruffleHog secret scanning, CycloneDX
   SBOM, nox multi-version testing, and a mkdocs documentation site
   ([430ac97])
+- Bump hypothesis dev dependency from 6.161.6 to 6.163.0 ([36bb4b6], [#77])
 
 ## [2.0.1] - 2026-03-17
 
@@ -214,6 +215,7 @@ and this project adheres to
 
 [a4c3b19]: https://github.com/LeakIX/l9format-python/commit/a4c3b19
 [430ac97]: https://github.com/LeakIX/l9format-python/commit/430ac97
+[36bb4b6]: https://github.com/LeakIX/l9format-python/commit/36bb4b6
 [953d604]: https://github.com/LeakIX/l9format-python/commit/953d604
 [72bf877]: https://github.com/LeakIX/l9format-python/commit/72bf877
 [c9216ba]: https://github.com/LeakIX/l9format-python/commit/c9216ba
@@ -319,3 +321,4 @@ and this project adheres to
 [#67]: https://github.com/LeakIX/l9format-python/pull/67
 [#69]: https://github.com/LeakIX/l9format-python/pull/69
 [#43]: https://github.com/LeakIX/l9format-python/issues/43
+[#77]: https://github.com/LeakIX/l9format-python/pull/77
