@@ -15,6 +15,7 @@ and this project adheres to
   zizmor workflow security scanning, TruffleHog secret scanning, CycloneDX
   SBOM, nox multi-version testing, and a mkdocs documentation site
   ([430ac97])
+- CI: bump astral-sh/setup-uv from 7 to 9 ([9301d73], [#75])
 
 ## [2.0.1] - 2026-03-17
 
@@ -214,6 +215,7 @@ and this project adheres to
 
 [a4c3b19]: https://github.com/LeakIX/l9format-python/commit/a4c3b19
 [430ac97]: https://github.com/LeakIX/l9format-python/commit/430ac97
+[9301d73]: https://github.com/LeakIX/l9format-python/commit/9301d73
 [953d604]: https://github.com/LeakIX/l9format-python/commit/953d604
 [72bf877]: https://github.com/LeakIX/l9format-python/commit/72bf877
 [c9216ba]: https://github.com/LeakIX/l9format-python/commit/c9216ba
@@ -318,4 +320,5 @@ and this project adheres to
 [#65]: https://github.com/LeakIX/l9format-python/pull/65
 [#67]: https://github.com/LeakIX/l9format-python/pull/67
 [#69]: https://github.com/LeakIX/l9format-python/pull/69
+[#75]: https://github.com/LeakIX/l9format-python/pull/75
 [#43]: https://github.com/LeakIX/l9format-python/issues/43
