@@ -62,9 +62,10 @@ test-all: ## Run tests across all supported Python versions (nox)
 audit: ## Audit dependencies for known vulnerabilities
 	@requirements_file=$$(mktemp); \
 	trap 'rm -f "$$requirements_file"' EXIT; \
-	uv export --format requirements-txt --no-dev --no-emit-project \
+	uv export --format requirements-txt --no-dev \
 		--no-hashes -o "$$requirements_file"; \
-	uv run pip-audit -r "$$requirements_file" --progress-spinner=off
+	uv run pip-audit -r "$$requirements_file" \
+		--skip-editable --progress-spinner=off
 
 .PHONY: zizmor
 zizmor: ## Audit GitHub Actions workflows for security issues
