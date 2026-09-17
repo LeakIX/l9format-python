@@ -15,33 +15,21 @@ and this project adheres to
   zizmor workflow security scanning, TruffleHog secret scanning, CycloneDX
   SBOM, nox multi-version testing, and a mkdocs documentation site
   ([430ac97])
-- Bump hypothesis dev dependency from 6.161.6 to 6.163.0 ([36bb4b6], [#77])
-- CI: bump astral-sh/setup-uv from 7 to 9 ([9301d73], [#75])
+- Bump hypothesis dev dependency from 6.161.6 to 6.168.0 ([#77], [#87],
+  [#90], [#97], [#102])
+- CI: bump astral-sh/setup-uv from 7.6.0 to 10.1.0 ([#75], [#92], [#100])
 - CI: bump actions/checkout from 6 to 7 ([#70])
 - CI: bump tarides/changelog-check-action from 3 to 4 ([#73])
 - CI: bump actions/upload-artifact from 4.6.2 to 7.0.1 ([#76])
-- CI: bump zizmorcore/zizmor-action from 0.6.1 to 0.6.2 ([#78])
-- Bump zizmor dev dependency from 1.28.0 to 1.29.0 ([#82])
-- CI: bump trufflesecurity/trufflehog from 3.96.0 to 3.97.0 ([#84])
-- Bump nox dev dependency from 2026.7.11 to 2026.8.10 ([#85])
-- Bump ruff dev dependency from 0.16.0 to 0.16.3 ([#86])
-- Bump hypothesis dev dependency from 6.163.0 to 6.165.9 ([#87])
+- CI: bump zizmorcore/zizmor-action from 0.6.1 to 0.6.4 ([#78], [#95],
+  [#101])
+- Bump zizmor dev dependency from 1.28.0 to 1.30.1 ([#82], [#98], [#103])
+- CI: bump trufflesecurity/trufflehog from 3.96.0 to 3.97.4 ([#84], [#93],
+  [#96])
+- Bump nox dev dependency from 2026.7.11 to 2026.8.17 ([#85], [#89])
+- Bump ruff dev dependency from 0.16.0 to 0.16.7 ([#86], [#94], [#99],
+  [#104])
 - Bump mypy dev dependency from 2.3.0 to 2.3.1 ([#88])
-- Bump nox dev dependency from 2026.8.10 to 2026.8.17 ([#89])
-- Bump hypothesis dev dependency from 6.165.9 to 6.165.10 ([#90])
-- CI: bump astral-sh/setup-uv from 9.0.0 to 10.0.1 ([#92])
-- CI: bump trufflesecurity/trufflehog from 3.97.0 to 3.97.1 ([#93])
-- Bump ruff dev dependency from 0.16.3 to 0.16.5 ([#94])
-- CI: bump zizmorcore/zizmor-action from 0.6.2 to 0.6.3 ([#95])
-- CI: bump trufflesecurity/trufflehog from 3.97.1 to 3.97.4 ([#96])
-- Bump hypothesis dev dependency from 6.165.10 to 6.167.1 ([#97])
-- Bump zizmor dev dependency from 1.29.0 to 1.30.0 ([#98])
-- Bump ruff dev dependency from 0.16.5 to 0.16.6 ([#99])
-- CI: bump astral-sh/setup-uv from 10.0.1 to 10.1.0 ([#100])
-- CI: bump zizmorcore/zizmor-action from 0.6.3 to 0.6.4 ([#101])
-- Bump hypothesis dev dependency from 6.167.1 to 6.168.0 ([#102])
-- Bump zizmor dev dependency from 1.30.0 to 1.30.1 ([#103])
-- Bump ruff dev dependency from 0.16.6 to 0.16.7 ([#104])
 
 ## [2.0.1] - 2026-03-17
 
