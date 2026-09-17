@@ -15,8 +15,21 @@ and this project adheres to
   zizmor workflow security scanning, TruffleHog secret scanning, CycloneDX
   SBOM, nox multi-version testing, and a mkdocs documentation site
   ([430ac97])
-- Bump hypothesis dev dependency from 6.161.6 to 6.163.0 ([36bb4b6], [#77])
-- CI: bump astral-sh/setup-uv from 7 to 9 ([9301d73], [#75])
+- Bump hypothesis dev dependency from 6.161.6 to 6.168.0 ([#77], [#87],
+  [#90], [#97], [#102])
+- CI: bump astral-sh/setup-uv from 7.6.0 to 10.1.0 ([#75], [#92], [#100])
+- CI: bump actions/checkout from 6 to 7 ([#70])
+- CI: bump tarides/changelog-check-action from 3 to 4 ([#73])
+- CI: bump actions/upload-artifact from 4.6.2 to 7.0.1 ([#76])
+- CI: bump zizmorcore/zizmor-action from 0.6.1 to 0.6.4 ([#78], [#95],
+  [#101])
+- Bump zizmor dev dependency from 1.28.0 to 1.30.1 ([#82], [#98], [#103])
+- CI: bump trufflesecurity/trufflehog from 3.96.0 to 3.97.4 ([#84], [#93],
+  [#96])
+- Bump nox dev dependency from 2026.7.11 to 2026.8.17 ([#85], [#89])
+- Bump ruff dev dependency from 0.16.0 to 0.16.7 ([#86], [#94], [#99],
+  [#104])
+- Bump mypy dev dependency from 2.3.0 to 2.3.1 ([#88])
 
 ## [2.0.1] - 2026-03-17
 
@@ -322,7 +335,31 @@ and this project adheres to
 [#65]: https://github.com/LeakIX/l9format-python/pull/65
 [#67]: https://github.com/LeakIX/l9format-python/pull/67
 [#69]: https://github.com/LeakIX/l9format-python/pull/69
+[#70]: https://github.com/LeakIX/l9format-python/pull/70
+[#73]: https://github.com/LeakIX/l9format-python/pull/73
 [#75]: https://github.com/LeakIX/l9format-python/pull/75
+[#76]: https://github.com/LeakIX/l9format-python/pull/76
 [#77]: https://github.com/LeakIX/l9format-python/pull/77
+[#78]: https://github.com/LeakIX/l9format-python/pull/78
+[#82]: https://github.com/LeakIX/l9format-python/pull/82
+[#84]: https://github.com/LeakIX/l9format-python/pull/84
+[#85]: https://github.com/LeakIX/l9format-python/pull/85
+[#86]: https://github.com/LeakIX/l9format-python/pull/86
+[#87]: https://github.com/LeakIX/l9format-python/pull/87
+[#88]: https://github.com/LeakIX/l9format-python/pull/88
+[#89]: https://github.com/LeakIX/l9format-python/pull/89
+[#90]: https://github.com/LeakIX/l9format-python/pull/90
+[#92]: https://github.com/LeakIX/l9format-python/pull/92
+[#93]: https://github.com/LeakIX/l9format-python/pull/93
+[#94]: https://github.com/LeakIX/l9format-python/pull/94
+[#95]: https://github.com/LeakIX/l9format-python/pull/95
+[#96]: https://github.com/LeakIX/l9format-python/pull/96
+[#97]: https://github.com/LeakIX/l9format-python/pull/97
+[#98]: https://github.com/LeakIX/l9format-python/pull/98
+[#99]: https://github.com/LeakIX/l9format-python/pull/99
+[#100]: https://github.com/LeakIX/l9format-python/pull/100
+[#101]: https://github.com/LeakIX/l9format-python/pull/101
+[#102]: https://github.com/LeakIX/l9format-python/pull/102
+[#103]: https://github.com/LeakIX/l9format-python/pull/103
+[#104]: https://github.com/LeakIX/l9format-python/pull/104
 [#43]: https://github.com/LeakIX/l9format-python/issues/43
-[#77]: https://github.com/LeakIX/l9format-python/pull/77
