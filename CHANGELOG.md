@@ -18,28 +18,32 @@ and this project adheres to
 
 #### Development dependencies
 
-- Bump cyclonedx-bom dev dependency from 7.3.1 to 7.4.0 ([5a94f4a], [#109])
-- Bump hypothesis dev dependency from 6.161.6 to 6.168.1 ([8719510], [2627a81],
-  [2724dec], [ea189a2], [af0d8ea], [6661007], [#77], [#87], [#90], [#97],
-  [#102], [#116])
-- Bump mypy dev dependency from 2.3.0 to 2.3.1 ([a54bc41], [#88])
+- Bump cyclonedx-bom dev dependency from 7.3.1 to 7.5.0 ([5a94f4a], [a5cfdbb],
+  [#109], [#119])
+- Bump hypothesis dev dependency from 6.161.6 to 6.169.0 ([8719510], [2627a81],
+  [2724dec], [ea189a2], [af0d8ea], [6661007], [6376dd7], [6417873], [#77],
+  [#87], [#90], [#97], [#102], [#116], [#120], [#122])
+- Bump mypy dev dependency from 2.3.0 to 2.4.0 ([a54bc41], [16bf399], [#88],
+  [#118])
 - Bump nox dev dependency from 2026.7.11 to 2026.8.17 ([bf2e0b6], [d0d48c5],
   [#85], [#89])
-- Bump ruff dev dependency from 0.16.0 to 0.16.9 ([c5d0db8], [e23d58c],
-  [0c0710d], [c41fad9], [4827950], [12f2549], [#86], [#94], [#99], [#104],
-  [#111], [#117])
+- Bump ruff dev dependency from 0.16.0 to 0.17.0 ([c5d0db8], [e23d58c],
+  [0c0710d], [c41fad9], [4827950], [12f2549], [3fc70ba], [4f874e3], [#86],
+  [#94], [#99], [#104], [#111], [#117], [#121], [#125])
 - Bump zizmor dev dependency from 1.28.0 to 1.30.1 ([751b17b], [0bffd7c],
   [b268e00], [#82], [#98], [#103])
 
 #### User-facing dependencies
 
-- Bump astral-sh/setup-uv from 7.6.0 to 10.2.0 ([75175f8], [ce9dd0b],
-  [adf4d82], [8f0b0e4], [#75], [#92], [#100], [#114])
+- Bump astral-sh/setup-uv from 7.6.0 to 10.3.0 ([75175f8], [ce9dd0b],
+  [adf4d82], [8f0b0e4], [73c2fc7], [#75], [#92], [#100], [#114], [#126])
 - Bump actions/checkout from 6 to 7 ([c181add], [#70])
 - Bump tarides/changelog-check-action from 3 to 4 ([e92b75e], [#73])
-- Bump actions/upload-artifact from 4.6.2 to 7.0.1 ([40705f4], [#76])
-- Bump trufflesecurity/trufflehog from 3.96.0 to 3.97.9 ([c7bbc57],
-  [4dc7ed3], [0ed61ae], [b34e373], [#84], [#93], [#96], [#115])
+- Bump actions/upload-artifact from 4.6.2 to 7.0.2 ([40705f4], [e7bc438],
+  [#76], [#123])
+- Bump trufflesecurity/trufflehog from 3.96.0 to 3.99.2 ([c7bbc57],
+  [4dc7ed3], [0ed61ae], [b34e373], [a72b749], [#84], [#93], [#96], [#115],
+  [#124])
 - Bump zizmorcore/zizmor-action from 0.6.1 to 0.6.4 ([bf99694],
   [bfc74f2], [d294e3b], [#78], [#95], [#101])
 
@@ -242,8 +246,15 @@ and this project adheres to
 [a4c3b19]: https://github.com/LeakIX/l9format-python/commit/a4c3b19
 [430ac97]: https://github.com/LeakIX/l9format-python/commit/430ac97
 [12f2549]: https://github.com/LeakIX/l9format-python/commit/12f2549
+[16bf399]: https://github.com/LeakIX/l9format-python/commit/16bf399
 [4827950]: https://github.com/LeakIX/l9format-python/commit/4827950
+[4f874e3]: https://github.com/LeakIX/l9format-python/commit/4f874e3
 [5a94f4a]: https://github.com/LeakIX/l9format-python/commit/5a94f4a
+[6376dd7]: https://github.com/LeakIX/l9format-python/commit/6376dd7
+[6417873]: https://github.com/LeakIX/l9format-python/commit/6417873
+[73c2fc7]: https://github.com/LeakIX/l9format-python/commit/73c2fc7
+[a5cfdbb]: https://github.com/LeakIX/l9format-python/commit/a5cfdbb
+[a72b749]: https://github.com/LeakIX/l9format-python/commit/a72b749
 [c41fad9]: https://github.com/LeakIX/l9format-python/commit/c41fad9
 [6661007]: https://github.com/LeakIX/l9format-python/commit/6661007
 [8f0b0e4]: https://github.com/LeakIX/l9format-python/commit/8f0b0e4
@@ -251,8 +262,10 @@ and this project adheres to
 [af0d8ea]: https://github.com/LeakIX/l9format-python/commit/af0d8ea
 [adf4d82]: https://github.com/LeakIX/l9format-python/commit/adf4d82
 [b34e373]: https://github.com/LeakIX/l9format-python/commit/b34e373
+[e7bc438]: https://github.com/LeakIX/l9format-python/commit/e7bc438
 [d294e3b]: https://github.com/LeakIX/l9format-python/commit/d294e3b
 [c5d0db8]: https://github.com/LeakIX/l9format-python/commit/c5d0db8
+[3fc70ba]: https://github.com/LeakIX/l9format-python/commit/3fc70ba
 [0c0710d]: https://github.com/LeakIX/l9format-python/commit/0c0710d
 [0bffd7c]: https://github.com/LeakIX/l9format-python/commit/0bffd7c
 [ea189a2]: https://github.com/LeakIX/l9format-python/commit/ea189a2
@@ -413,4 +426,13 @@ and this project adheres to
 [#115]: https://github.com/LeakIX/l9format-python/pull/115
 [#116]: https://github.com/LeakIX/l9format-python/pull/116
 [#117]: https://github.com/LeakIX/l9format-python/pull/117
+[#118]: https://github.com/LeakIX/l9format-python/pull/118
+[#119]: https://github.com/LeakIX/l9format-python/pull/119
+[#120]: https://github.com/LeakIX/l9format-python/pull/120
+[#121]: https://github.com/LeakIX/l9format-python/pull/121
+[#122]: https://github.com/LeakIX/l9format-python/pull/122
+[#123]: https://github.com/LeakIX/l9format-python/pull/123
+[#124]: https://github.com/LeakIX/l9format-python/pull/124
+[#125]: https://github.com/LeakIX/l9format-python/pull/125
+[#126]: https://github.com/LeakIX/l9format-python/pull/126
 [#43]: https://github.com/LeakIX/l9format-python/issues/43
